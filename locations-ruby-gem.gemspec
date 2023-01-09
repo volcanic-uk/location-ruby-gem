@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "A gem for interacting with the Volcanic locations service"
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/volcanic-uk/location-ruby-gem"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  spec.required_ruby_version = "~> 2.5"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
