@@ -8,3 +8,5 @@ module Location
     # Your code goes here...
   end
 end
+
+require_relative "gem/config"

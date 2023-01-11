@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "location/gem"
+require "location/gem/connection"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -11,5 +12,11 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.before do
+    Location::Gem.configure do |configure|
+      configure.domain_url = "http://test.com"
+    end
   end
 end
