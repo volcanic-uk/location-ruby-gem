@@ -2,6 +2,7 @@
 
 # configuration
 module Location
+  # configuration
   module Gem
     def self.configure
       yield Location::Gem::Configuration if block_given?
