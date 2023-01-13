@@ -1,4 +1,4 @@
-# Location::Gem
+# Volcanic::Location
 
 A Ruby Gem for the Location Service
 

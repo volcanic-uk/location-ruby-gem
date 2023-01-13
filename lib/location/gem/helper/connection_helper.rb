@@ -3,14 +3,14 @@
 require_relative "../connection"
 
 # Helper function
-module Location
-  module Gem
+module Volcanic
+  module Location
     # connection helper
     module ConnectionHelper
       attr_writer :conn
 
       def conn
-        @conn ||= Location::Gem::Connection.new
+        @conn ||= Volcanic::Location::Connection.new
       end
     end
   end

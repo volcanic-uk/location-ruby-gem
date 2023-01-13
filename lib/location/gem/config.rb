@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 # configuration
-module Location
+module Volcanic
   # configuration
-  module Gem
+  module Location
     def self.configure
-      yield Location::Gem::Configuration if block_given?
-      Location::Gem::Configuration
+      yield Volcanic::Location::Configuration if block_given?
+      Volcanic::Location::Configuration
     end
 
     # configuration class
@@ -23,7 +23,7 @@ module Location
         private
 
         def raise_missing_for(name)
-          raise Location::Gem::MissingConfiguration, "#{name} is required to be configured."
+          raise Volcanic::Location::MissingConfiguration, "#{name} is required to be configured."
         end
       end
     end

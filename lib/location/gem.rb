@@ -2,8 +2,8 @@
 
 require_relative "gem/version"
 
-module Location
-  module Gem
+module Volcanic
+  module Location
     class Error < StandardError; end
     # Your code goes here...
   end

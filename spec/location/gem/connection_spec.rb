@@ -2,10 +2,10 @@
 
 require "location/gem/version"
 
-RSpec.describe Location::Gem::Connection do
+RSpec.describe Volcanic::Location::Connection do
   let(:stubs)  { Faraday::Adapter::Test::Stubs.new }
   let(:middleware) {}
-  let(:base_url) { Location::Gem.configure.domain_url }
+  let(:base_url) { Volcanic::Location.configure.domain_url }
   let(:conn) do
     Faraday.new(base_url) do |connection|
       connection.adapter(:test, stubs)

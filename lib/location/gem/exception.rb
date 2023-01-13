@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Location
-  module Gem
+module Volcanic
+  module Location
     class LocationError < StandardError; end
 
     class MissingConfiguration < LocationError; end

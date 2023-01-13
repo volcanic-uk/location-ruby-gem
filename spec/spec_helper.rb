@@ -15,7 +15,7 @@ RSpec.configure do |config|
   end
 
   config.before do
-    Location::Gem.configure do |configure|
+    Volcanic::Location.configure do |configure|
       configure.domain_url = "http://test.com"
     end
   end

@@ -4,7 +4,7 @@ require_relative "lib/location/gem/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "locations-ruby-gem"
-  spec.version       = Location::Gem::VERSION
+  spec.version       = Volcanic::Location::VERSION
   spec.authors       = ["Volcanic UK"]
   spec.email         = [""]
 

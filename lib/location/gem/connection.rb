@@ -7,15 +7,15 @@ require "forwardable"
 Dir[File.join(__dir__, "middleware", "*.rb")].sort.each { |file| require file }
 
 # TODO: need to have spec file
-module Location
-  module Gem
+module Volcanic
+  module Location
     # connection
     class Connection
       extend Forwardable
 
       attr_accessor :conn
 
-      def_delegators "Location::Gem::Configuration".to_sym, :domain_url
+      def_delegators "Volcanic::Location::Configuration".to_sym, :domain_url
       def_delegators :conn, :get, :post, :delete, :put
 
       def initialize
@@ -27,10 +27,10 @@ module Location
           conn.adapter Faraday.default_adapter
 
           conn.use Faraday::Response::Logger
-          # conn.use Location::Gem::Middleware::UserAgent
-          # conn.use Location::Gem::Middleware::Authentication
-          # conn.use Location::Gem::Middleware::RequestId
-          # conn.use Location::Gem::Middleware::Exception
+          # conn.use Volcanic::Location::Middleware::UserAgent
+          # conn.use Volcanic::Location::Middleware::Authentication
+          # conn.use Volcanic::Location::Middleware::RequestId
+          # conn.use Volcanic::Location::Middleware::Exception
         end
       end
 
