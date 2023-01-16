@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "lib/location/gem/version"
+require_relative "lib/volcanic/location/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "locations-ruby-gem"
+  spec.name          = "volcanic-location"
   spec.version       = Volcanic::Location::VERSION
   spec.authors       = ["Volcanic UK"]
   spec.email         = [""]

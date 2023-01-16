@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "location/gem"
-require "location/gem/connection"
+require "volcanic/location"
+require "volcanic/location/connection"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

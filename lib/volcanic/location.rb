@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "gem/version"
+require_relative "location/version"
 
 module Volcanic
   module Location
@@ -9,4 +9,4 @@ module Volcanic
   end
 end
 
-require_relative "gem/config"
+require_relative "location/config"

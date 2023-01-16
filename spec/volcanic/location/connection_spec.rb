@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "location/gem/version"
+require "volcanic/location/version"
 
 RSpec.describe Volcanic::Location::Connection do
   let(:stubs)  { Faraday::Adapter::Test::Stubs.new }
