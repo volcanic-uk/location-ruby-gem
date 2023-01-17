@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec.describe Location::Gem do
+RSpec.describe Volcanic::Location do
   it "has a version number" do
-    expect(Location::Gem::VERSION).not_to be nil
+    expect(Volcanic::Location::VERSION).not_to be nil
   end
 
   it "does something useful" do

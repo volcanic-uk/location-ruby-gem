@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Location
-  module Gem
+module Volcanic
+  module Location
     VERSION = "0.1.0"
   end
 end
