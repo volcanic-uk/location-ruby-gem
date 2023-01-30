@@ -10,3 +10,4 @@ module Volcanic
 end
 
 require_relative "location/config"
+require_relative "location/v1"
