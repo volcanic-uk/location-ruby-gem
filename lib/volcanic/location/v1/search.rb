@@ -11,9 +11,11 @@ class Volcanic::Location::V1::Search
 
   # Initialiser with filter as param
   # Then call search with the filter
-  def initialize(filter)
+  def initialize(**filter)
     write_attr(filter)
   end
+
+  private
 
   def search(filter)
     res = conn.get(API_PATH) do |req|
@@ -24,8 +26,6 @@ class Volcanic::Location::V1::Search
     res.body[:locations]
     # TODO: create Location objects
   end
-
-  private
 
   attr_writer("locations")
 
