@@ -3,14 +3,8 @@
 require "volcanic/location/version"
 
 RSpec.describe Volcanic::Location::V1::Search do
-  let(:stubs)  { Faraday::Adapter::Test::Stubs.new(strict_mode: true) }
-  let(:middleware) {}
-  let(:base_url) { Volcanic::Location.configure.domain_url }
-
   let(:conn) { Volcanic::Location::Connection }
 
-  let(:status) { 200 }
-  let(:headers) { { "Content-Type" => "application/json" } }
   let(:response_body) { { locations: [{ "name": "test", "id": 1234 }, { "name": "test2", "id": 1236 }] } }
   let(:response) { double "response" }
   let(:api_path) { "api/v1/locations" }
