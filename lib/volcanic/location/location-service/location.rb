@@ -1,8 +1,9 @@
 require_relative '../helper/connection_helper'
+
 require_relative 'location_class_method'
 
 Class Location
-    
+
     include Volcanic::Location::ConnectionHelper
     UPDATABLE_ATTR = %i(name geonames_id asciiname alternatenames latitude coordinate feature_class feature_code country_code 
         admin1 admin2 admin3 admin4 timezone population modification_date parent_id admin1_name descendants_id hide)
@@ -27,4 +28,20 @@ Class Location
         end
     end
 
-  
+    def delete()
+        conn.delete(API_path)
+    end
+
+    private
+
+    def API_path
+        "#{API_PATH}/#{id}"
+    end
+
+    def write_self(**attrs)
+        (UPDATABLE_ATTR + NON_UPDATABLE_ATTR).each do |key|
+          send("#{key}=", attrs[key])
+        end
+        true
+    end
+end
