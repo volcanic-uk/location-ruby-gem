@@ -19,7 +19,7 @@ class Volcanic::Location::V1::Search
 
   def search(filter)
     res = conn.get(API_PATH) do |req|
-      req.body = { 'query': filter }
+      req.params = filter
     end
 
     self.locations = res.body[:locations]
