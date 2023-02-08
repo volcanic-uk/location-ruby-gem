@@ -1,7 +1,3 @@
-require_relative '../helper/connection_helper'
-
-require_relative 'location_class_method'
-
 Class Location
 
     include Volcanic::Location::ConnectionHelper
