@@ -1,4 +1,7 @@
-Class Location
+# frozen_string_literal: true
+require_relative "../helper/connection_helper"
+
+class Volcanic::Location::V1::Location
 
     include Volcanic::Location::ConnectionHelper
     UPDATABLE_ATTR = %i(name geonames_id asciiname alternatenames latitude coordinate feature_class feature_code country_code 
@@ -14,25 +17,27 @@ Class Location
     end
 
     def read
-        response = conn.get(API_Path)
+        response = conn.get(api_path)
         write_self(JSON.parse(response.body))
     end
 
     def save
-        conn.post(API_path) do |req|
+        conn.post(api_path) do |req|
             req.body = Hash[UPDATABLE_ATTR.map {|attr| [attr, send(attr)] }]
         end
     end
 
     def delete()
-        conn.delete(API_path)
+        conn.delete(api_path)
     end
 
     private
 
-    def API_path
+    def api_path
         "#{API_PATH}/#{id}"
     end
+
+    attr_writer(*NON_UPDATABLE_ATTR)
 
     def write_self(**attrs)
         (UPDATABLE_ATTR + NON_UPDATABLE_ATTR).each do |key|
