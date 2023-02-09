@@ -18,7 +18,7 @@ class Volcanic::Location::V1::Location
 
     def read
         response = conn.get(api_path)
-        write_self(JSON.parse(response.body))
+        write_self(response.body)
     end
 
     def save
