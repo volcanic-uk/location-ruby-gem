@@ -1,3 +1,5 @@
+require 'json'
+
 RSpec.describe Volcanic::Location::V1::Location do
   let(:conn) { Volcanic::Location::Connection }
 
@@ -74,19 +76,20 @@ RSpec.describe Volcanic::Location::V1::Location do
     let(:request) {double "request"}
 
     before do
-      allow_any_instance_of(conn).to receive(:post).with("api/v1/locations/1", request_body).and_return(request)
+      allow(request).to receive(:body).and_return(request_body.to_json)
+      allow_any_instance_of(conn).to receive(:post).with("api/v1/locations/1",body: request_body).and_return(request)
     end
     it "saves the location" do
+      expect(subject.name).to eq("incorrect name")
+      expect_any_instance_of(conn).to receive(:post).with("api/v1/locations/1",body: request_body).and_return(request)
       subject.save
-      expect(conn).to have_received(:post).with("api/v1/locations", request_body)
     end
   end
 
   describe "#delete" do
     it "deletes the location" do
-      expect(conn).to receive(:delete).with("api/v1/locations/#{subject.id}")
+      expect_any_instance_of(conn).to receive(:delete).with("api/v1/locations/#{subject.id}").and_return(response)
       subject.delete
-      
     end
   end
 end

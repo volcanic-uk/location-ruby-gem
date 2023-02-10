@@ -22,9 +22,7 @@ class Volcanic::Location::V1::Location
     end
 
     def save
-        conn.post(api_path) do |req|
-            req.body = Hash[UPDATABLE_ATTR.map {|attr| [attr, send(attr)] }]
-        end
+        conn.post(api_path, body: Hash[UPDATABLE_ATTR.map {|attr| [attr, send(attr)] }])
     end
 
     def delete()
