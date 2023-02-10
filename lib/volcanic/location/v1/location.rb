@@ -2,6 +2,7 @@
 
 require_relative "../helper/connection_helper"
 
+# location class
 class Volcanic::Location::V1::Location
   include Volcanic::Location::ConnectionHelper
   UPDATABLE_ATTR = %i(name geonames_id asciiname alternatenames latitude coordinate feature_class feature_code country_code
