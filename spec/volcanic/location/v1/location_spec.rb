@@ -1,55 +1,61 @@
-require 'json'
+# frozen_string_literal: true
+
+require "json"
 
 RSpec.describe Volcanic::Location::V1::Location do
   let(:conn) { Volcanic::Location::Connection }
 
-  let(:response_body) {{
-    id: 1,
-    name: "Example Location",
-    geonames_id: 1,
-    asciiname: "Example Location",
-    alternatenames: "Example Location",
-    latitude: 0.0,
-    coordinate: 0.0,
-    feature_class: "A",
-    feature_code: "ADM1",
-    country_code: "US",
-    admin1: "US-CA",
-    admin2: nil,
-    admin3: nil,
-    admin4: nil,
-    timezone: "America/Los_Angeles",
-    population: 0,
-    modification_date: "2022-01-01T01:00:00Z",
-    parent_id: nil,
-    admin1_name: "California",
-    descendants_id: [],
-    hide: false
-  }}
+  let(:response_body) do
+    {
+      id: 1,
+      name: "Example Location",
+      geonames_id: 1,
+      asciiname: "Example Location",
+      alternatenames: "Example Location",
+      latitude: 0.0,
+      coordinate: 0.0,
+      feature_class: "A",
+      feature_code: "ADM1",
+      country_code: "US",
+      admin1: "US-CA",
+      admin2: nil,
+      admin3: nil,
+      admin4: nil,
+      timezone: "America/Los_Angeles",
+      population: 0,
+      modification_date: "2022-01-01T01:00:00Z",
+      parent_id: nil,
+      admin1_name: "California",
+      descendants_id: [],
+      hide: false
+    }
+  end
 
-  let(:location_params) {{
-    id: 1,
-    name: "incorrect name",
-    geonames_id: 1,
-    asciiname: "Example Location",
-    alternatenames: "Example Location",
-    latitude: 0.0,
-    coordinate: 0.0,
-    feature_class: "A",
-    feature_code: "ADM1",
-    country_code: "US",
-    admin1: "US-CA",
-    admin2: nil,
-    admin3: nil,
-    admin4: nil,
-    timezone: "America/Los_Angeles",
-    population: 0,
-    modification_date: "2022-01-01T01:00:00Z",
-    parent_id: nil,
-    admin1_name: "California",
-    descendants_id: [],
-    hide: false
-  }}
+  let(:location_params) do
+    {
+      id: 1,
+      name: "incorrect name",
+      geonames_id: 1,
+      asciiname: "Example Location",
+      alternatenames: "Example Location",
+      latitude: 0.0,
+      coordinate: 0.0,
+      feature_class: "A",
+      feature_code: "ADM1",
+      country_code: "US",
+      admin1: "US-CA",
+      admin2: nil,
+      admin3: nil,
+      admin4: nil,
+      timezone: "America/Los_Angeles",
+      population: 0,
+      modification_date: "2022-01-01T01:00:00Z",
+      parent_id: nil,
+      admin1_name: "California",
+      descendants_id: [],
+      hide: false
+    }
+  end
 
   let(:response) { double "response" }
 
@@ -73,15 +79,15 @@ RSpec.describe Volcanic::Location::V1::Location do
 
   describe "#save" do
     let(:request_body) { Hash[Volcanic::Location::V1::Location::UPDATABLE_ATTR.map { |attr| [attr, subject.send(attr)] }] }
-    let(:request) {double "request"}
+    let(:request) { double "request" }
 
     before do
       allow(request).to receive(:body).and_return(request_body.to_json)
-      allow_any_instance_of(conn).to receive(:post).with("api/v1/locations/1",body: request_body).and_return(request)
+      allow_any_instance_of(conn).to receive(:post).with("api/v1/locations/1", body: request_body).and_return(request)
     end
     it "saves the location" do
       expect(subject.name).to eq("incorrect name")
-      expect_any_instance_of(conn).to receive(:post).with("api/v1/locations/1",body: request_body).and_return(request)
+      expect_any_instance_of(conn).to receive(:post).with("api/v1/locations/1", body: request_body).and_return(request)
       subject.save
     end
   end
