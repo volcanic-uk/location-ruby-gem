@@ -14,7 +14,7 @@ require "volcanic/location"
 Volcanic::Location.configure do |config|
   # config.service = "test-service"
   config.domain_url = "http://127.0.0.1:8008/"
-  # config.authentication = "" # add auth token here
+  config.authentication = "" # add auth token here
 end
 
 def reload!(print = true)

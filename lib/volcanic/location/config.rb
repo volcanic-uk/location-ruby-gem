@@ -12,6 +12,7 @@ module Volcanic
     # configuration class
     class Configuration
       class << self
+        attr_accessor :authentication
         attr_writer :domain_url
 
         def domain_url

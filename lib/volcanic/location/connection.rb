@@ -28,7 +28,7 @@ module Volcanic
 
           conn.use Faraday::Response::Logger
           conn.use Volcanic::Location::Middleware::UserAgent
-          # conn.use Volcanic::Location::Middleware::Authentication
+          conn.use Volcanic::Location::Middleware::Authentication
           conn.use Volcanic::Location::Middleware::RequestId
           # conn.use Volcanic::Location::Middleware::Exception
         end

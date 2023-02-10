@@ -28,15 +28,45 @@ RSpec.describe Volcanic::Location::Connection do
 
   describe "when using User-Agent middleware" do
     let(:middleware) { Volcanic::Location::Middleware::UserAgent }
-    it("should content User-Agent header") do
+    it("should contain User-Agent header") do
       expect(subject.env[:request_headers]).to eq("User-Agent" => "Location v#{Volcanic::Location::VERSION}")
     end
   end
 
   describe "when using RequestId middleware" do
     let(:middleware) { Volcanic::Location::Middleware::RequestId }
-    it("should content x-request-id header") do
+    it("should contain x-request-id header") do
       expect(subject.env[:request_headers]["x-request-id"]).to be_truthy
+    end
+  end
+
+  describe "when using Authentication middleware" do
+    let(:middleware) { Volcanic::Location::Middleware::Authentication }
+
+    it("should contain Authorization header") do
+      expect(subject.env[:request_headers]["Authorization"]).to be_truthy
+    end
+
+    context "processing auth key" do
+      let(:auth_key) {}
+      before { Volcanic::Location.configure.authentication = auth_key }
+
+      context "when auth_key is a string" do
+        let(:auth_key) { "1234" }
+        it { expect(subject.env[:request_headers]["Authorization"]).to eq "Bearer 1234" }
+      end
+
+      context "when auth_key is a type of callable" do
+        let(:auth_key) { -> { "1234" } }
+        it { expect(subject.env[:request_headers]["Authorization"]).to eq "Bearer 1234" }
+      end
+    end
+
+    context "when requesting to non-location url" do
+      let(:base_url) { "http://not-location-url" }
+      it "should not content Authorization header" do
+        expect(subject.env[:request_headers]["Authorization"]).to be_nil
+      end
     end
   end
 end

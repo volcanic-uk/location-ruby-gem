@@ -17,6 +17,7 @@ RSpec.configure do |config|
   config.before do
     Volcanic::Location.configure do |configure|
       configure.domain_url = "http://test.com"
+      configure.authentication = "api_key"
     end
   end
 end
