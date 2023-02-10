@@ -36,7 +36,7 @@ RSpec.describe Volcanic::Location::Connection do
   describe "when using RequestId middleware" do
     let(:middleware) { Volcanic::Location::Middleware::RequestId }
     it("should content x-request-id header") do
-      expect(subject.env[:request_headers]["x-request-id"]).to be_present
+      expect(subject.env[:request_headers]["x-request-id"]).to be_truthy
     end
   end
 end
