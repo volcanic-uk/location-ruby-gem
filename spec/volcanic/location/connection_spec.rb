@@ -29,7 +29,7 @@ RSpec.describe Volcanic::Location::Connection do
   describe "when using User-Agent middleware" do
     let(:middleware) { Faraday::Response::Logger }
     it("should content User-Agent header") do
-      expect(subject.env[:request_headers]).to eq("User-Agent" => "Faraday v1.10.2")
+      expect(subject.env[:request_headers]).to eq("User-Agent" => "Faraday v1.10.3")
     end
   end
 end

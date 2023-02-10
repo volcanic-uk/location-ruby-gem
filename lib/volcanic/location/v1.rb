@@ -8,3 +8,4 @@ module Volcanic
 end
 
 require_relative "v1/location"
+require_relative "v1/search"
