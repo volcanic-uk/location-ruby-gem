@@ -29,7 +29,7 @@ RSpec.describe Volcanic::Location::Connection do
   describe "when using User-Agent middleware" do
     let(:middleware) { Volcanic::Location::Middleware::UserAgent }
     it("should contain User-Agent header") do
-      expect(subject.env[:request_headers]).to eq("User-Agent" => "Location v#{Volcanic::Location::VERSION}")
+      expect(subject.env[:request_headers]).to eq("User-Agent" => "Location-ruby-gem v#{Volcanic::Location::VERSION}")
     end
   end
 

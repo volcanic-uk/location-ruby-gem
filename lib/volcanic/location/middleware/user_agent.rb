@@ -8,7 +8,7 @@ module Volcanic::Location::Middleware
   class UserAgent
     def initialize(app = nil)
       @app = app
-      @user_agent = "Location v#{Volcanic::Location::VERSION}"
+      @user_agent = "Location-ruby-gem v#{Volcanic::Location::VERSION}"
     end
 
     def call(request_env)
