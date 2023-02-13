@@ -79,16 +79,14 @@ RSpec.describe Volcanic::Location::V1::Location do
 
   describe "#save" do
     let(:request_body) { Hash[Volcanic::Location::V1::Location::UPDATABLE_ATTR.map { |attr| [attr, subject.send(attr)] }] }
-    let(:request) { double "request" }
+    let(:mock_name) { "updated_name" }
 
-    before do
-      allow(request).to receive(:body).and_return(request_body.to_json)
-      allow_any_instance_of(conn).to receive(:post).with("api/v1/locations/1", body: request_body).and_return(request)
-    end
     it "saves the location" do
       expect(subject.name).to eq("incorrect name")
-      expect_any_instance_of(conn).to receive(:post).with("api/v1/locations/1", body: request_body).and_return(request)
+      expect_any_instance_of(conn).to receive(:post).with("api/v1/locations/1", body: { **request_body, name: mock_name }).and_return(response)
+      subject.name = mock_name
       subject.save
+      expect(subject.name).to eq mock_name
     end
   end
 
