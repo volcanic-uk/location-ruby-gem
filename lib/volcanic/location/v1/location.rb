@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../helper/connection_helper"
+require "json"
 
 # location class
 class Volcanic::Location::V1::Location
@@ -17,9 +18,23 @@ class Volcanic::Location::V1::Location
     write_self(attrs)
   end
 
+  def self.conn
+    Volcanic::Location::Connection
+  end
+
   def read
     response = conn.get(api_path)
     write_self(response.body)
+  end
+
+  def self.create(location_params)
+    response = conn.new.post(API_PATH, body: location_params)
+    response.body
+  end
+
+  def self.create_with_geonames(geonames_id)
+    response = conn.new.post(API_PATH, body: geonames_id)
+    response.body
   end
 
   def save
