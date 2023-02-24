@@ -6,7 +6,6 @@ require "forwardable"
 
 Dir[File.join(__dir__, "middleware", "*.rb")].sort.each { |file| require file }
 
-# TODO: need to have spec file
 module Volcanic
   module Location
     # connection
@@ -30,7 +29,7 @@ module Volcanic
           conn.use Volcanic::Location::Middleware::UserAgent
           conn.use Volcanic::Location::Middleware::Authentication
           conn.use Volcanic::Location::Middleware::RequestId
-          # conn.use Volcanic::Location::Middleware::Exception
+          conn.use Volcanic::Location::Middleware::Exception
         end
       end
 

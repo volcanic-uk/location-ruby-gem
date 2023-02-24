@@ -37,7 +37,7 @@ module Volcanic::Location::Middleware
       when 403
         Volcanic::Location::Forbidden
       when 404
-        Volcanic::Location::ImageNotFound
+        Volcanic::Location::LocationNotFound
       end
     end
 
