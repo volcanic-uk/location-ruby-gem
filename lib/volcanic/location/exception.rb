@@ -8,13 +8,8 @@ module Volcanic
 
     class ServerError < LocationError; end
 
-    # TODO: find new name for this
-    class MiddleError < LocationError; end
+    class LocationNotFound < LocationError; end
 
-    class LocationNotFound < MiddleError; end
-
-    class Forbidden < MiddleError; end
-
-    class S3SignedUrlError < MiddleError; end
+    class Forbidden < LocationError; end
   end
 end

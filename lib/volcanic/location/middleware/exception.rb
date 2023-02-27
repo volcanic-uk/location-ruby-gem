@@ -21,7 +21,7 @@ module Volcanic::Location::Middleware
         when 400..410
           error = build_standard_error(body)
           exception = resolve_exception(error[:error_code], status_code, env)
-          raise(exception || Volcanic::Location::MiddleError, error.to_json)
+          raise(exception || Volcanic::Location::LocationError, error.to_json)
         when 500
           raise Volcanic::Location::ServerError, build_server_error(body)
         end
@@ -30,9 +30,7 @@ module Volcanic::Location::Middleware
 
     private
 
-    def resolve_exception(_error_code, status_code, env)
-      return Volcanic::Location::S3SignedUrlError unless domain_url?(env[:url])
-
+    def resolve_exception(_error_code, status_code, _env)
       case status_code
       when 403
         Volcanic::Location::Forbidden

@@ -76,7 +76,7 @@ RSpec.describe Volcanic::Location::Connection do
     context "when response status 400" do
       let(:status) { 400 }
       let(:body) { { errorCode: 1001 } }
-      it("raises LocationError") { expect { subject }.to raise_error Volcanic::Location::MiddleError }
+      it("raises LocationError") { expect { subject }.to raise_error Volcanic::Location::LocationError }
     end
 
     context "when response status 403 forbidden" do
@@ -87,12 +87,6 @@ RSpec.describe Volcanic::Location::Connection do
     context "when response status 404 NotFound" do
       let(:status) { 404 }
       it("raises LocationNotFound") { expect { subject }.to raise_error Volcanic::Location::LocationNotFound }
-    end
-
-    context "when response status 404 from s3 signed url" do
-      let(:base_url) { "http://s3-signed-url" }
-      let(:status) { 400 }
-      it("raises S3SignedUrlError") { expect { subject }.to raise_error Volcanic::Location::S3SignedUrlError }
     end
   end
 end
