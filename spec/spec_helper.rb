@@ -2,6 +2,7 @@
 
 require "volcanic/location"
 require "volcanic/location/connection"
+require "volcanic/location/exception"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

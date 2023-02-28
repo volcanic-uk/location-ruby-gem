@@ -7,5 +7,9 @@ module Volcanic
     class MissingConfiguration < LocationError; end
 
     class ServerError < LocationError; end
+
+    class LocationNotFound < LocationError; end
+
+    class Forbidden < LocationError; end
   end
 end

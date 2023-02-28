@@ -69,4 +69,24 @@ RSpec.describe Volcanic::Location::Connection do
       end
     end
   end
+
+  describe "when using Exception middleware" do
+    let(:middleware) { Volcanic::Location::Middleware::Exception }
+
+    context "when response status 400" do
+      let(:status) { 400 }
+      let(:body) { { errorCode: 1001 } }
+      it("raises LocationError") { expect { subject }.to raise_error Volcanic::Location::LocationError }
+    end
+
+    context "when response status 403 forbidden" do
+      let(:status) { 403 }
+      it("raises Forbidden") { expect { subject }.to raise_error Volcanic::Location::Forbidden }
+    end
+
+    context "when response status 404 NotFound" do
+      let(:status) { 404 }
+      it("raises LocationNotFound") { expect { subject }.to raise_error Volcanic::Location::LocationNotFound }
+    end
+  end
 end
