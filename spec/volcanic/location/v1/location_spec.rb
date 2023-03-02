@@ -79,11 +79,7 @@ RSpec.describe Volcanic::Location::V1::Location do
   end
 
   describe "#create" do
-    before do
-      allow(response).to receive(:body).and_return({ id: 1 })
-    end
-    it "creates a new location" do
-      new_location_params = {
+    new_location_params = {
         name: "New Location",
         geonames_id: 1234,
         asciiname: "New Location",
@@ -104,23 +100,25 @@ RSpec.describe Volcanic::Location::V1::Location do
         admin1_name: "California",
         descendants_id: [],
         hide: false
-      }
+    }
+    before do
+      allow(response).to receive(:body).and_return(new_location_params)
+    end
+    it "creates a new location" do
       location = described_class.new(described_class.create(new_location_params))
-      expect(location.id).to eq(1)
+      expect(location.name).to eq("New Location")
     end
   end
 
   describe "#create_with_geonames" do
-    before do
-      allow(response).to receive(:body).and_return({ id: 1 })
-    end
+    
     it "creates a new location from a Geonames ID" do
       geonames_params = {
-        geonames_id: 3_038_825,
+        geonames_id: 1234,
         fetch_from_geonames: true
       }
       location = described_class.new(described_class.create_with_geonames(geonames_params))
-      expect(location.id).to eq(1)
+      expect(location.name).to eq( "Example Location" )
     end
   end
   describe "#save" do
