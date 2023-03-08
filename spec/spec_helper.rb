@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-require "volcanic/location"
-require "volcanic/location/connection"
-require "volcanic/location/exception"
+require 'volcanic/location'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
+  config.example_status_persistence_file_path = '.rspec_status'
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
@@ -17,8 +15,8 @@ RSpec.configure do |config|
 
   config.before do
     Volcanic::Location.configure do |configure|
-      configure.domain_url = "http://test.com"
-      configure.authentication = "api_key"
+      configure.domain_url = 'http://test.com'
+      configure.authentication = 'api_key'
     end
   end
 end

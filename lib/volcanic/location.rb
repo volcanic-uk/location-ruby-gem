@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "location/version"
+require_relative '../volcanic'
 
 module Volcanic
-  module Location
-    class Error < StandardError; end
-    # Your code goes here...
-  end
+  # forward module declaration
+  module Location; end
 end
 
-require_relative "location/config"
-require_relative "location/v1"
+require_relative 'location/config'
+require_relative 'location/exception'
+require_relative 'location/v1'

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "faraday"
-require "faraday_middleware"
-require "forwardable"
+require 'faraday'
+require 'faraday_middleware'
+require 'forwardable'
 
-Dir[File.join(__dir__, "middleware", "*.rb")].sort.each { |file| require file }
+Dir[File.join(__dir__, 'middleware', '*.rb')].sort.each { |file| require file }
 
 module Volcanic
   module Location
@@ -14,7 +14,7 @@ module Volcanic
 
       attr_accessor :conn
 
-      def_delegators "Volcanic::Location::Configuration".to_sym, :domain_url
+      def_delegators 'Volcanic::Location::Configuration'.to_sym, :domain_url
       def_delegators :conn, :get, :post, :delete, :put
 
       def initialize

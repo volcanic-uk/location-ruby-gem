@@ -16,7 +16,7 @@ module Volcanic
         attr_writer :domain_url
 
         def domain_url
-          raise_missing_for "domain" if @domain_url.nil?
+          raise_missing_for 'domain' if @domain_url.nil?
 
           @domain_url
         end

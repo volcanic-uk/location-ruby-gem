@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "forwardable"
-require_relative "middleware"
-require_relative "helper"
+require 'forwardable'
+require_relative 'middleware'
+require_relative 'helper'
 
 module Volcanic::Location::Middleware
   # authentication middleware
@@ -10,7 +10,7 @@ module Volcanic::Location::Middleware
     extend Forwardable
     include Helper
 
-    def_delegators "Volcanic::Location::Configuration".to_sym, :authentication
+    def_delegators 'Volcanic::Location::Configuration'.to_sym, :authentication
 
     def initialize(app = nil)
       @app = app
@@ -18,9 +18,9 @@ module Volcanic::Location::Middleware
 
     def call(env)
       if domain_url? env[:url]
-        env[:request_headers]["Authorization"] ||= auth_key
+        env[:request_headers]['Authorization'] ||= auth_key
       else
-        env[:request_headers]&.delete("Authorization")
+        env[:request_headers]&.delete('Authorization')
       end
 
       @app.call(env)

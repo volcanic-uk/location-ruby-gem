@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../connection"
+require_relative '../connection'
 
 # Helper function
 module Volcanic

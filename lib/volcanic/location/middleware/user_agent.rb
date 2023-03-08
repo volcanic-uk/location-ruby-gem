@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "../version"
-require_relative "middleware"
+require_relative '../version'
+require_relative 'middleware'
 
 module Volcanic::Location::Middleware
   # middleware for user agent header
@@ -12,7 +12,7 @@ module Volcanic::Location::Middleware
     end
 
     def call(request_env)
-      request_env[:request_headers]["user-agent"] = @user_agent
+      request_env[:request_headers]['user-agent'] = @user_agent
 
       @app.call(request_env)
     end
