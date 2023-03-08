@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "middleware"
-require_relative "helper"
-require "active_support/core_ext/hash"
+require_relative 'middleware'
+require_relative 'helper'
 
 module Volcanic::Location::Middleware
   # Exception
@@ -41,11 +40,11 @@ module Volcanic::Location::Middleware
 
     def build_standard_error(body)
       error = {
-        request_id: body.delete("request_id"),
-        message: body.delete("message"),
-        reason: body.delete("reason"),
-        status_code: body.delete("httpStatusCode"),
-        error_code: body.delete("errorCode")
+        request_id: body.delete('request_id'),
+        message: body.delete('message'),
+        reason: body.delete('reason'),
+        status_code: body.delete('httpStatusCode'),
+        error_code: body.delete('errorCode')
       }.compact
 
       error.empty? ? body : error
@@ -53,8 +52,8 @@ module Volcanic::Location::Middleware
 
     def build_server_error(body)
       {
-        request_id: body.delete("request_id"),
-        message: "Server error, Please contact Location service support/team",
+        request_id: body.delete('request_id'),
+        message: 'Server error, Please contact Location service support/team',
         status_code: 500
       }
     end
@@ -62,11 +61,7 @@ module Volcanic::Location::Middleware
     def resolve_body(body)
       JSON.parse(body)
     rescue JSON::ParserError
-      begin
-        Hash.from_xml(body)
-      rescue REXML::ParseException
-        {}
-      end
+      {}
     end
   end
 end
