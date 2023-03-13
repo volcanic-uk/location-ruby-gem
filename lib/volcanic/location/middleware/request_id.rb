@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "middleware"
-require "securerandom"
+require_relative 'middleware'
+require 'securerandom'
 
 module Volcanic::Location::Middleware
   # RequestId
@@ -11,7 +11,7 @@ module Volcanic::Location::Middleware
     end
 
     def call(request_env)
-      request_env[:request_headers]["x-request-id"] ||= request_id
+      request_env[:request_headers]['x-request-id'] ||= request_id
 
       @app.call(request_env)
     end

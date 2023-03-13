@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "middleware"
+require_relative 'middleware'
 
 module Volcanic::Location::Middleware
   # middleware helper
