@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "location/gem"
+require "volcanic/location"
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
@@ -10,6 +10,26 @@ require "location/gem"
 # (If you use this, don't forget to add pry to your Gemfile!)
 # require "pry"
 # Pry.start
+
+Volcanic::Location.configure do |config|
+  # config.service = "test-service"
+  config.domain_url = "http://127.0.0.1:8008/"
+  config.authentication = "eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6ImE1ZjUzZmEyNWYyZjgyYTM4NDNjNGFmMTFiZDgwMWExIn0.eyJleHAiOjE2ODQxNTkwNTIsInN1YiI6InVzZXI6Ly9sb2NhbC8tMS92b2xjYW5pYy92b2xjYW5pYyIsIm5iZiI6MTY3ODE1OTExMiwiYXVkIjpbIioiXSwiaWF0IjoxNjc4MTU5MTEyLCJpc3MiOiJ2b2xjYW5pY19hdXRoX3NlcnZpY2VfYXAyIn0.AE7EVAZfX5hYDwUzbfr2qX-5UFkr6CbK9C6jgsBMDM-hDrDNCvYRy2KAj-0LEj6svNu-qY8sOHLrEwxVbF17Vd00AHLZHKEniZHIwITVvkebte8Nzx5j9RNxa3M4TCqkB__OE89dQXtzPjf3J69eNz1GdzFgEHcGVfHtaXSSQtMsKORB" # add auth token here
+end
+
+def reload!(print = true)
+  puts "Reloading ..." if print
+  # Main project directory.
+  root_dir = File.expand_path("..", __dir__)
+  # Directories within the project that should be reloaded.
+  reload_dirs = %w(lib)
+  # Loop through and reload every file in all relevant project directories.
+  reload_dirs.each do |dir|
+    Dir.glob("#{root_dir}/#{dir}/**/*.rb").each { |f| load(f) }
+  end
+  # Return true when complete.
+  true
+end
 
 require "irb"
 IRB.start(__FILE__)
