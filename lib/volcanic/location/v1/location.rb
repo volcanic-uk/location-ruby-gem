@@ -65,6 +65,16 @@ class Volcanic::Location::V1::Location
     !(pk.nil? || pk == '')
   end
 
+  # present the locale to target translations value
+  def name(val = locale)
+    @name[:"#{val}"]
+  end
+
+  # returns the raw value
+  def raw_name
+    @name
+  end
+
   private
 
   def persisted_path
@@ -82,5 +92,13 @@ class Volcanic::Location::V1::Location
       send("#{key}=", attrs[key])
     end
     true
+  end
+
+  def locale
+    fetch_i18n || 'en'
+  end
+
+  def fetch_i18n
+    iI18n.locale if defined?(iI18n)
   end
 end
