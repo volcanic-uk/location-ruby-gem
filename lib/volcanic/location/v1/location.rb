@@ -99,6 +99,6 @@ class Volcanic::Location::V1::Location
   end
 
   def fetch_i18n
-    iI18n.locale if defined?(iI18n)
+    I18n.locale if defined?(I18n)
   end
 end
