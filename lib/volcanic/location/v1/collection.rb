@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Volcanic::Location::V1
+  # collection extends to Array class
   class Collection < Array
     attr_accessor :page, :page_size
 

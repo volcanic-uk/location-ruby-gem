@@ -21,8 +21,9 @@ class Volcanic::Location::V1::Search
 
   private
 
-  def search_api 
+  def search_api
     return ADVANCE_PATH if advance
+
     STANDARD_PATH
   end
 
