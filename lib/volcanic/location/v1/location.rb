@@ -70,9 +70,20 @@ class Volcanic::Location::V1::Location
     @name[:"#{val}"]
   end
 
-  # returns the raw value
+  # returns the raw value of name
+  # eg { en: 'London', es: Londres }
   def raw_name
     @name
+  end
+
+  def hierarchy
+    Volcanic::Location::V1::Collection.for_locations(@hierarchy)
+  end
+
+  # returns the raw value of hierarchy
+  # eg ['geo-123', 'geo-124']
+  def raw_hierarchy
+    @hierarchy
   end
 
   private

@@ -35,9 +35,7 @@ class Volcanic::Location::V1::Search
   end
 
   def build_instance(pagination: nil, locations: nil)
-    self.locations = locations&.map do |loc|
-      Volcanic::Location::V1::Location.new(**loc)
-    end
+    self.locations = Volcanic::Location::V1::Collection.for_locations(locations)
     self.pagination = pagination
   end
 
