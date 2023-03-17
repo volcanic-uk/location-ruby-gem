@@ -6,25 +6,39 @@ require_relative '../helper/connection_helper'
 class Volcanic::Location::V1::Search
   include Volcanic::Location::ConnectionHelper
 
-  API_PATH = 'api/v1/locations'
+  STANDARD_PATH = 'api/v1/locations'
+  ADVANCE_PATH = 'api/v1/advanced_search'
   attr_reader('locations', 'pagination')
+  attr_accessor :advance
 
   # Initialiser with filter as param
   # Then call search with the filter
-  def initialize(**filter)
+  # by default it uses advance search
+  def initialize(advance: true, **filter)
+    @advance = advance
     search(filter)
   end
 
   private
 
+  def search_api 
+    return ADVANCE_PATH if advance
+    STANDARD_PATH
+  end
+
   def search(filter)
-    res = conn.get(API_PATH) do |req|
+    res = conn.get(search_api) do |req|
       req.params = filter
     end
 
-    self.locations = res.body[:locations]
-    self.pagination = res.body[:pagination]
-    # TODO: create Location objects
+    build_instance(**res.body)
+  end
+
+  def build_instance(pagination: nil, locations: nil)
+    self.locations = locations&.map do |loc|
+      Volcanic::Location::V1::Location.new(**loc)
+    end
+    self.pagination = pagination
   end
 
   attr_writer('locations', 'pagination')
