@@ -12,10 +12,6 @@ class Volcanic::Location::V1::Collection < Array
 
   def self.for_locations(collection, **args)
     array = collection.map do |item|
-      unless item.is_a?(Hash)
-        throw ArgumentError.new('none supported locations data')
-      end
-
       Volcanic::Location::V1::Location.new(**item)
     end
 
