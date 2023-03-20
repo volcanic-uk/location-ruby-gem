@@ -13,7 +13,7 @@ require "volcanic/location"
 
 Volcanic::Location.configure do |config|
   config.domain_url = "http://127.0.0.1:8008/"
-  config.authentication = "eyJhbGciOiJFUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6ImE1ZjUzZmEyNWYyZjgyYTM4NDNjNGFmMTFiZDgwMWExIn0.eyJleHAiOjE2ODQxNTkwNTIsInN1YiI6InVzZXI6Ly9sb2NhbC8tMS92b2xjYW5pYy92b2xjYW5pYyIsIm5iZiI6MTY3ODE1OTExMiwiYXVkIjpbIioiXSwiaWF0IjoxNjc4MTU5MTEyLCJpc3MiOiJ2b2xjYW5pY19hdXRoX3NlcnZpY2VfYXAyIn0.AE7EVAZfX5hYDwUzbfr2qX-5UFkr6CbK9C6jgsBMDM-hDrDNCvYRy2KAj-0LEj6svNu-qY8sOHLrEwxVbF17Vd00AHLZHKEniZHIwITVvkebte8Nzx5j9RNxa3M4TCqkB__OE89dQXtzPjf3J69eNz1GdzFgEHcGVfHtaXSSQtMsKORB" # add auth token here
+  config.authentication = "" # add auth token here
 end
 
 def reload!(print = true)
