@@ -6,10 +6,10 @@ require 'json'
 # location class
 class Volcanic::Location::V1::Location
   include Volcanic::Location::ConnectionHelper
-  UPDATABLE_ATTR = %i(name asciiname alternatenames latitude longitude hierarchy
-                      coordinate feature_class feature_code country_code source_type source_id
-                      admin1 admin2 admin3 admin4 timezone population modification_date
-                      parent_id admin1_name descendants_id hide).freeze
+  UPDATABLE_ATTR = %i( asciiname alternatenames latitude longitude hierarchy
+                       coordinate feature_class feature_code country_code source_type source_id
+                       admin1 admin2 admin3 admin4 timezone population modification_date
+                       parent_id admin1_name descendants_id hide).freeze
   NON_UPDATABLE_ATTR = %i(pk id).freeze
 
   API_PATH = 'api/v1/locations'
