@@ -6,11 +6,11 @@ require 'json'
 # location class
 class Volcanic::Location::V1::Location
   include Volcanic::Location::ConnectionHelper
-  UPDATABLE_ATTR = %i( asciiname alternatenames latitude longitude hierarchy
+  UPDATABLE_ATTR = %i( name asciiname alternatenames latitude longitude hierarchy_ids
                        coordinate feature_class feature_code country_code source_type source_id
                        admin1 admin2 admin3 admin4 timezone population modification_date
                        parent_id admin1_name descendants_id hide).freeze
-  NON_UPDATABLE_ATTR = %i(pk id).freeze
+  NON_UPDATABLE_ATTR = %i(pk id hierarchy).freeze
 
   API_PATH = 'api/v1/locations'
 
@@ -47,9 +47,8 @@ class Volcanic::Location::V1::Location
   # end
 
   def save(path: persisted_path, **extra_params)
-    body = Hash[UPDATABLE_ATTR.map { |attr| [attr, send(attr)] }]
     response = conn.post(path) do |req|
-      req.body = body.merge(extra_params).compact
+      req.body = fetch_self.merge(extra_params).compact
     end
 
     response.tap { |res| write_self(**res.body) }
@@ -80,12 +79,6 @@ class Volcanic::Location::V1::Location
     Volcanic::Location::V1::Collection.for_locations(@hierarchy)
   end
 
-  # returns the raw value of hierarchy
-  # eg ['geo-123', 'geo-124']
-  def raw_hierarchy
-    @hierarchy
-  end
-
   private
 
   def persisted_path
@@ -103,6 +96,18 @@ class Volcanic::Location::V1::Location
       send("#{key}=", attrs[key])
     end
     true
+  end
+
+  def fetch_self
+    Hash[UPDATABLE_ATTR.map do |attr|
+      val = if attr == :name
+              raw_name
+            else
+              send(attr)
+            end
+
+      [attr, val]
+    end]
   end
 
   def locale
