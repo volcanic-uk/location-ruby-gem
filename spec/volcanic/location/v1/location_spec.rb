@@ -112,4 +112,60 @@ RSpec.describe Volcanic::Location::V1::Location do
       end
     end
   end
+
+  describe '#hierarchy' do
+    let(:response_body) do
+      {
+        hierarchy: [
+          { source_id: 1234, source_type: source_type },
+          { source_id: 1235, source_type: source_type }
+        ]
+      }
+    end
+
+    it 'generate a collection of Location' do
+      expect(subject.hierarchy).to be_a Array
+      expect(subject.hierarchy.first).to be_a described_class
+    end
+  end
+
+  describe '#name' do
+    let(:response_body) do
+      {
+        name: {
+          'en': 'some-name-en',
+          'es': 'some-name-es'
+        }
+      }
+    end
+
+    let(:locale) { :en }
+    let(:i18n) { OpenStruct.new(locale: locale) }
+
+    before do
+      stub_const('I18n', i18n)
+    end
+
+    it 'return en for default' do
+      expect(subject.name).to eq 'some-name-en'
+    end
+
+    describe 'for other locale' do
+      let(:locale) { :es }
+      it { expect(subject.name).to eq 'some-name-es' }
+    end
+  end
+
+  describe 'raw_name' do
+    let(:response_body) do
+      {
+        name: {
+          'en': 'some-name-en',
+          'es': 'some-name-es'
+        }
+      }
+    end
+
+    it { expect(subject.raw_name).to eq response_body[:name] }
+  end
 end
