@@ -4,10 +4,17 @@ require 'volcanic/location/version'
 
 RSpec.describe Volcanic::Location::V1::Search do
   let(:conn) { Volcanic::Location::Connection }
+  let(:loc_instance) { Volcanic::Location::V1::Location }
 
-  let(:response_body) { { locations: [{ "name": 'test', "id": 1234 }, { "name": 'test2', "id": 1236 }] } }
+  let(:mock_locs) do
+    [
+      { "source_type": 'test', "source_id": 1234 },
+      { "source_type": 'test', "source_id": 1236 }
+    ]
+  end
+  let(:response_body) { { locations: mock_locs } }
   let(:response) { double 'response' }
-  let(:api_path) { 'api/v1/locations' }
+  let(:api_path) { 'api/v1/advanced_search' }
 
   let(:filter) { { 'name': 'test' } }
 
@@ -22,7 +29,8 @@ RSpec.describe Volcanic::Location::V1::Search do
 
   describe 'search' do
     it 'Should return locations' do
-      expect(instance.locations).to eq([{ "name": 'test', "id": 1234 }, { "name": 'test2', "id": 1236 }])
+      expect(instance.locations[0]).to be_a loc_instance
+      expect(instance.locations[1]).to be_a loc_instance
     end
     context 'when no filter' do
       let(:filter) {}

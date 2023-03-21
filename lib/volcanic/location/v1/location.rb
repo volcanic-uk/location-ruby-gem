@@ -6,11 +6,11 @@ require 'json'
 # location class
 class Volcanic::Location::V1::Location
   include Volcanic::Location::ConnectionHelper
-  UPDATABLE_ATTR = %i(name asciiname alternatenames latitude longitude
-                      coordinate feature_class feature_code country_code source_type source_id
-                      admin1 admin2 admin3 admin4 timezone population modification_date
-                      parent_id admin1_name descendants_id hide).freeze
-  NON_UPDATABLE_ATTR = %i(pk id).freeze
+  UPDATABLE_ATTR = %i( name asciiname alternatenames latitude longitude hierarchy_ids
+                       coordinate feature_class feature_code country_code source_type source_id
+                       admin1 admin2 admin3 admin4 timezone population modification_date
+                       parent_id admin1_name descendants_id hide).freeze
+  NON_UPDATABLE_ATTR = %i(pk id hierarchy).freeze
 
   API_PATH = 'api/v1/locations'
 
@@ -47,9 +47,8 @@ class Volcanic::Location::V1::Location
   # end
 
   def save(path: persisted_path, **extra_params)
-    body = Hash[UPDATABLE_ATTR.map { |attr| [attr, send(attr)] }]
     response = conn.post(path) do |req|
-      req.body = body.merge(extra_params).compact
+      req.body = fetch_self.merge(extra_params).compact
     end
 
     response.tap { |res| write_self(**res.body) }
@@ -63,6 +62,21 @@ class Volcanic::Location::V1::Location
 
   def persisted?
     !(pk.nil? || pk == '')
+  end
+
+  # present the locale to target translations value
+  def name(val = locale)
+    @name[:"#{val}"]
+  end
+
+  # returns the raw value of name
+  # eg { en: 'London', es: Londres }
+  def raw_name
+    @name
+  end
+
+  def hierarchy
+    Volcanic::Location::V1::Collection.for_locations(@hierarchy)
   end
 
   private
@@ -82,5 +96,25 @@ class Volcanic::Location::V1::Location
       send("#{key}=", attrs[key])
     end
     true
+  end
+
+  def fetch_self
+    Hash[UPDATABLE_ATTR.map do |attr|
+      val = if attr == :name
+              raw_name
+            else
+              send(attr)
+            end
+
+      [attr, val]
+    end]
+  end
+
+  def locale
+    fetch_i18n || 'en'
+  end
+
+  def fetch_i18n
+    I18n.locale if defined?(I18n)
   end
 end
