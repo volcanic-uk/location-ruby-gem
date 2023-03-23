@@ -77,7 +77,7 @@ class Volcanic::Location::V1::Location
 
   def hierarchy
     return [] unless @hierarchy
-    
+
     Volcanic::Location::V1::Collection.for_locations(@hierarchy)
   end
 

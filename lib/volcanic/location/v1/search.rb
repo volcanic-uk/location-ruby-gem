@@ -35,19 +35,19 @@ class Volcanic::Location::V1::Search
     build_instance(**res.body)
   end
 
-  def build_instance(pagination: nil, locations: nil)
+  def build_instance(pagination: {}, locations: [])
     page = destruct_pagination(pagination)
 
-    self.locations = 
+    self.locations =
       Volcanic::Location::V1::Collection.for_locations(locations, **page)
     self.pagination = pagination
   end
 
   def destruct_pagination(obj)
     {
-      page: obj&.page
-      per_page: obj&.per_page
-      total_count: obj&.total_count
+      page: obj[:page],
+      per_page: obj[:per_page],
+      total_count: obj[:total_count]
     }
   end
 
