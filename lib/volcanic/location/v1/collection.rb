@@ -3,11 +3,12 @@
 module Volcanic::Location::V1
   # collection extends to Array class
   class Collection < Array
-    attr_accessor :page, :page_size
+    attr_accessor :page, :per_page, :total_count
 
-    def initialize(array, page: nil, page_size: nil)
+    def initialize(array, page: nil, per_page: nil, total_count: nil)
       @page = page
-      @page_size = page_size
+      @per_page = per_page
+      @total_count = total_count
       super array
     end
 
