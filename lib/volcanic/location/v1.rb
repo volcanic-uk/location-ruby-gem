@@ -9,4 +9,5 @@ end
 
 require_relative 'v1/location'
 require_relative 'v1/search'
+require_relative 'v1/find'
 require_relative 'v1/collection'
