@@ -8,7 +8,6 @@ class Volcanic::Location::V1::Find
   attr_reader('location', 'uuid')
 
   def initialize(source_type:, source_id:)
-    puts 'Hello there'
     @uuid = "#{source_type}-#{source_id}"
     find
   end
@@ -18,9 +17,6 @@ class Volcanic::Location::V1::Find
   def find
     res = conn.get("#{PATH}/#{uuid}")
 
-    puts '******************************'
-    puts res.body[:locations]
-    puts '******************************'
     self.location = Volcanic::Location::V1::Location.new(**res.body[:locations])
   end
 end
