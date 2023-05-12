@@ -3,21 +3,21 @@
 require_relative '../helper/connection_helper'
 
 # searching class
-class Volcanic::Location::V1::Find
+class Volcanic::Location::V1::Show
   include Volcanic::Location::ConnectionHelper
 
   PATH = 'api/v1/locations'
-  attr_reader('location', 'uuid')
+  attr_reader('location', 'id')
 
   def initialize(source_type:, source_id:)
-    @uuid = "#{source_type}-#{source_id}"
-    find
+    @id = "#{source_type}-#{source_id}"
+    show
   end
 
   private
 
-  def find
-    res = conn.get("#{PATH}/#{uuid}")
+  def show
+    res = conn.get("#{PATH}/#{id}")
 
     self.location = Volcanic::Location::V1::Location.new(**res.body[:locations])
   end
