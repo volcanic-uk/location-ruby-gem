@@ -63,6 +63,19 @@ RSpec.describe Volcanic::Location::V1::Location do
     end
   end
 
+  describe '#find' do
+    let(:api_path) { "api/v1/locations/#{pk}" }
+
+    before(:each) { allow(response).to receive(:body).and_return(response_body) }
+    before(:each) { allow_any_instance_of(conn).to receive(:get).with(api_path).and_return(response) }
+
+    subject { described_class.find(pk) }
+
+    it 'finds a location' do
+      expect(subject).to be_an_instance_of(described_class)
+    end
+  end
+
   describe '#delete' do
     let(:api_path) { "api/v1/locations/#{pk}" }
 

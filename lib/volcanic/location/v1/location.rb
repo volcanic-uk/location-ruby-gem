@@ -5,7 +5,9 @@ require 'json'
 
 # location class
 class Volcanic::Location::V1::Location
+  extend Volcanic::Location::ConnectionHelper
   include Volcanic::Location::ConnectionHelper
+
   UPDATABLE_ATTR = %i( name asciiname alternatenames latitude longitude hierarchy_ids
                        coordinate feature_class feature_code country_code source_type source_id
                        admin1 admin2 admin3 admin4 timezone population modification_date
@@ -30,6 +32,12 @@ class Volcanic::Location::V1::Location
         .tap do |instance|
           instance.save(path: API_PATH, fetch_from_source: true)
         end
+    end
+
+    def find(id)
+      res = conn.get("#{API_PATH}/#{id}")
+
+      new(**res.body)
     end
   end
 
