@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'volcanic/location/exception'
 
 RSpec.describe Volcanic::Location::V1::Location do
   let(:conn) { Volcanic::Location::Connection }
@@ -65,6 +66,7 @@ RSpec.describe Volcanic::Location::V1::Location do
 
   describe '#find' do
     let(:api_path) { "api/v1/locations/#{pk}" }
+    let(:pk) { 'test-1234' }
 
     before(:each) { allow(response).to receive(:body).and_return(response_body) }
     before(:each) { allow_any_instance_of(conn).to receive(:get).with(api_path).and_return(response) }
@@ -73,6 +75,13 @@ RSpec.describe Volcanic::Location::V1::Location do
 
     it 'finds a location' do
       expect(subject).to be_an_instance_of(described_class)
+    end
+
+    context 'when incorrect primary key provided' do
+      let(:pk) { 'test' }
+      it 'raises location error' do
+        expect { subject }.to raise_error(Volcanic::Location::LocationError)
+      end
     end
   end
 

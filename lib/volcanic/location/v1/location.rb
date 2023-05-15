@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../helper/connection_helper'
+require_relative '../exception'
 require 'json'
 
 # location class
@@ -35,6 +36,8 @@ class Volcanic::Location::V1::Location
     end
 
     def find(id)
+      raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
+
       res = conn.get("#{API_PATH}/#{id}")
 
       new(**res.body)
