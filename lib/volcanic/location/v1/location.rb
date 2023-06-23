@@ -35,10 +35,10 @@ class Volcanic::Location::V1::Location
         end
     end
 
-    def find(id)
+    def find(id, **params)
       raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
 
-      res = conn.get("#{API_PATH}/#{id}")
+      res = conn.get("#{API_PATH}/#{id}", params)
 
       new(**res.body)
     end

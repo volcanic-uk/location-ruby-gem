@@ -67,14 +67,23 @@ RSpec.describe Volcanic::Location::V1::Location do
   describe '#find' do
     let(:api_path) { "api/v1/locations/#{pk}" }
     let(:pk) { 'test-1234' }
-
+    let(:query_params) { {} }
     before(:each) { allow(response).to receive(:body).and_return(response_body) }
-    before(:each) { allow_any_instance_of(conn).to receive(:get).with(api_path).and_return(response) }
+    before(:each) { allow_any_instance_of(conn).to receive(:get).with(api_path, query_params).and_return(response) }
 
     subject { described_class.find(pk) }
 
     it 'finds a location' do
       expect(subject).to be_an_instance_of(described_class)
+    end
+
+    context 'when with query params' do
+      let(:query_params) { { fetch_hierarchy: true } }
+      subject { described_class.find(pk, fetch_hierarchy: true) }
+
+      it 'finds a location with query params' do
+        expect(subject).to be_an_instance_of(described_class)
+      end
     end
 
     context 'when incorrect primary key provided' do
