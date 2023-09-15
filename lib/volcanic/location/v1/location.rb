@@ -42,6 +42,12 @@ class Volcanic::Location::V1::Location
 
       new(**res.body)
     end
+
+    def update(id, **params)
+      raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
+
+      conn.post("#{API_PATH}/#{id}", params)
+    end
   end
 
   def initialize(source_type:, source_id:, **params)
