@@ -94,6 +94,31 @@ RSpec.describe Volcanic::Location::V1::Location do
     end
   end
 
+  describe '#update' do
+    let(:api_path) { "api/v1/locations/#{pk}" }
+    let(:pk) { 'test-1234' }
+    let(:query_params) { { name: { en: 'london' } } }
+    before(:each) { allow(response).to receive(:body).and_return(response_body) }
+    before(:each) { allow_any_instance_of(conn).to receive(:get).with(api_path, query_params).and_return(response) }
+    let(:params) do
+      {
+        source_id: source_id,
+        source_type: source_type,
+        name: { en: 'london' }
+      }
+    end
+
+    subject { described_class.update(pk, query_params) }
+
+    it 'updates a location' do
+      expect(subject).to eq(response_body)
+    end
+    let(:pk) { 'test' }
+    it 'raises location error' do
+      expect { subject }.to raise_error(Volcanic::Location::LocationError)
+    end
+  end
+
   describe '#delete' do
     let(:api_path) { "api/v1/locations/#{pk}" }
 
