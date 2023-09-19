@@ -98,8 +98,14 @@ RSpec.describe Volcanic::Location::V1::Location do
     let(:api_path) { "api/v1/locations/#{pk}" }
     let(:pk) { 'test-1234' }
     let(:query_params) { { name: { en: 'london' } } }
+    let(:response_body) do
+      {
+        status: 200,
+        message: 'Successfully Updated'
+      }
+    end
     before(:each) { allow(response).to receive(:body).and_return(response_body) }
-    before(:each) { allow_any_instance_of(conn).to receive(:get).with(api_path, query_params).and_return(response) }
+    before(:each) { allow_any_instance_of(conn).to receive(:post).with(api_path, query_params).and_return(response) }
     let(:params) do
       {
         source_id: source_id,
@@ -108,14 +114,29 @@ RSpec.describe Volcanic::Location::V1::Location do
       }
     end
 
-    subject { described_class.update(pk, query_params) }
+    subject { described_class.update(pk, **query_params) }
 
     it 'updates a location' do
-      expect(subject).to eq(response_body)
+      expect(subject).to be_truthy
     end
-    let(:pk) { 'test' }
-    it 'raises location error' do
-      expect { subject }.to raise_error(Volcanic::Location::LocationError)
+
+    context 'when incorrect primary key provided' do
+      let(:pk) { 'test' }
+      it 'raises location error' do
+        expect { subject }.to raise_error(Volcanic::Location::LocationError)
+      end
+    end
+
+    context 'when update fails' do
+      let(:response_body) do
+        {
+          status: 404,
+          message: 'Location Not Found'
+        }
+      end
+      it 'returns false' do
+        expect(subject).to be_falsey
+      end
     end
   end
 

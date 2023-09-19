@@ -46,7 +46,9 @@ class Volcanic::Location::V1::Location
     def update(id, **params)
       raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
 
-      conn.post("#{API_PATH}/#{id}", params)
+      res = conn.post("#{API_PATH}/#{id}", params)
+
+      res.body[:status] == 200
     end
   end
 
