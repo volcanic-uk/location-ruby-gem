@@ -65,6 +65,7 @@ class Volcanic::Location::V1::Location
   #   self
   # end
 
+  # TODO: fix the update path to return the location
   def save(path: persisted_path, **extra_params)
     response = conn.post(path) do |req|
       req.body = fetch_self.merge(extra_params).compact
