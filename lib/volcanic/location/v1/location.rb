@@ -42,6 +42,14 @@ class Volcanic::Location::V1::Location
 
       new(**res.body)
     end
+
+    def update(id, **params)
+      raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
+
+      res = conn.post("#{API_PATH}/#{id}", params)
+
+      res.body[:status] == 200
+    end
   end
 
   def initialize(source_type:, source_id:, **params)
@@ -57,6 +65,7 @@ class Volcanic::Location::V1::Location
   #   self
   # end
 
+  # TODO: fix the update path to return the location
   def save(path: persisted_path, **extra_params)
     response = conn.post(path) do |req|
       req.body = fetch_self.merge(extra_params).compact
