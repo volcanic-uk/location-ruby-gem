@@ -75,9 +75,37 @@ class Volcanic::Location::V1::Location
     !(pk.nil? || pk == '')
   end
 
-  # present the locale to target translations value
-  def name(val = locale)
-    @name[:"#{val}"]
+  #6252001 country A PCLI
+  #4361885 State A ADM1 <-------
+  #4373554 county A ADM2
+  #4366945 town P PPL
+  def name(loc: locale, state: false)
+
+    translated_name = @name[:"#{loc}"]
+    
+    return translated_name unless state && @hierarchy
+    
+    return translated_name if %w(ADM1 PCLI PCL).include?(@feature_code)
+
+    state = state_name(loc)
+    if state
+      "#{translated_name}, #{state}" 
+    else
+      translated_name
+    end
+  end
+
+  def state_name(val)
+    return nil unless @hierarchy
+
+    state = hierarchy.detect do |loc|
+      loc.feature_code == 'ADM1'
+    end
+    if state
+      return state.raw_name[:"#{val}"]
+    else
+      return nil
+    end
   end
 
   # returns the raw value of name
