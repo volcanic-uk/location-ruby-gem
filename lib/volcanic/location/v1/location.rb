@@ -106,10 +106,12 @@ class Volcanic::Location::V1::Location
   def state_name(val)
     return nil unless @hierarchy
 
-    state = hierarchy.detect do |loc|
-      loc.feature_code == 'ADM1'
+    @state_name ||= begin
+      state = hierarchy.detect do |loc|
+        loc.feature_code == 'ADM1'
+      end
+      state.raw_name[:"#{val}"] if state
     end
-    state.raw_name[:"#{val}"] if state
   end
 
   # returns the raw value of name
