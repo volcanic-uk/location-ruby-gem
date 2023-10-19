@@ -4,6 +4,7 @@ require_relative '../helper/connection_helper'
 require_relative '../exception'
 require 'json'
 
+# rubocop:disable Metrics/ClassLength
 # location class
 class Volcanic::Location::V1::Location
   extend Volcanic::Location::ConnectionHelper
@@ -84,26 +85,22 @@ class Volcanic::Location::V1::Location
     !(pk.nil? || pk == '')
   end
 
-  #6252001 country A PCLI
-  #4361885 State A ADM1 <-------
-  #4373554 county A ADM2
-  #4366945 town P PPL
   def name(loc: locale, state: false)
-
     translated_name = @name[:"#{loc}"]
-    
+    translated_name ||= @name[:en]
     return translated_name unless state && @hierarchy
-    
+
     return translated_name if %w(ADM1 PCLI PCL).include?(@feature_code)
 
     state = state_name(loc)
     if state
-      "#{translated_name}, #{state}" 
+      "#{translated_name}, #{state}"
     else
       translated_name
     end
   end
 
+  # State: ADM1
   def state_name(val)
     return nil unless @hierarchy
 
@@ -111,7 +108,11 @@ class Volcanic::Location::V1::Location
       state = hierarchy.detect do |loc|
         loc.feature_code == 'ADM1'
       end
-      state.raw_name[:"#{val}"] if state
+      if state
+        name = state.raw_name[:"#{val}"]
+        name ||= state.raw_name[:en]
+      end
+      name
     end
   end
 
@@ -166,3 +167,4 @@ class Volcanic::Location::V1::Location
     I18n.locale if defined?(I18n)
   end
 end
+# rubocop:enable Metrics/ClassLength
