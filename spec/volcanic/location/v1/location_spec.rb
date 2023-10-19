@@ -220,26 +220,28 @@ RSpec.describe Volcanic::Location::V1::Location do
     let(:feature_code) { 'PPL' }
     let(:locale) { :en }
     let(:i18n) { OpenStruct.new(locale: locale) }
-    let(:hierarchy) {[
-      { source_id: 1234, source_type: source_type,
-        name: {
-          'en': 'county-en',
-          'es': 'county-es'
-        },
-        feature_code: 'ADM2'},
-      { source_id: 1235, source_type: source_type,
-        name: {
-          'en': 'state-en',
-          'es': 'state-es'
-        },
-        feature_code: 'ADM1' },
+    let(:hierarchy) do
+      [
+        { source_id: 1234, source_type: source_type,
+          name: {
+            'en': 'county-en',
+            'es': 'county-es'
+          },
+          feature_code: 'ADM2' },
+        { source_id: 1235, source_type: source_type,
+          name: {
+            'en': 'state-en',
+            'es': 'state-es'
+          },
+          feature_code: 'ADM1' },
         { source_id: 1236, source_type: source_type,
           name: {
             'en': 'country-en',
             'es': 'country-es'
           },
-          feature_code: 'PCLI'}
-    ]}
+          feature_code: 'PCLI' }
+      ]
+    end
 
     before do
       stub_const('I18n', i18n)
@@ -257,33 +259,33 @@ RSpec.describe Volcanic::Location::V1::Location do
     describe 'state enabled' do
       context 'no hierarchy' do
         let(:hierarchy) {}
-        it 'returns just name' do 
-          expect(subject.name(state: true)).to eq 'some-name-en' 
+        it 'returns just name' do
+          expect(subject.name(state: true)).to eq 'some-name-en'
         end
       end
       context 'with hierarchy' do
         context 'feature code is a town' do
           let(:feature_code) { 'PPL' }
-          it 'returns name and state' do 
-            expect(subject.name(state: true)).to eq 'some-name-en, state-en' 
+          it 'returns name and state' do
+            expect(subject.name(state: true)).to eq 'some-name-en, state-en'
           end
         end
         context 'feature code is a county' do
           let(:feature_code) { 'ADM2' }
-          it 'returns name and state' do 
-            expect(subject.name(state: true)).to eq 'some-name-en, state-en' 
+          it 'returns name and state' do
+            expect(subject.name(state: true)).to eq 'some-name-en, state-en'
           end
         end
         context 'feature code is a state' do
           let(:feature_code) { 'ADM1' }
-          it 'returns just name' do 
-            expect(subject.name(state: true)).to eq 'some-name-en' 
+          it 'returns just name' do
+            expect(subject.name(state: true)).to eq 'some-name-en'
           end
         end
         context 'feature code is a country' do
           let(:feature_code) { 'PCLI' }
-          it 'returns just name' do 
-            expect(subject.name(state: true)).to eq 'some-name-en' 
+          it 'returns just name' do
+            expect(subject.name(state: true)).to eq 'some-name-en'
           end
         end
         context 'for other locale' do
@@ -291,16 +293,19 @@ RSpec.describe Volcanic::Location::V1::Location do
           it { expect(subject.name(state: true)).to eq 'some-name-es, state-es' }
         end
         context 'no state in hierarchy' do
-          let(:hierarchy) {[
-            { source_id: 1234, source_type: source_type,
-              name: {
-                'en': 'county-en',
-                'es': 'county-es'
-              },
-              feature_code: 'ADM2'}]}
+          let(:hierarchy) do
+            [
+              { source_id: 1234, source_type: source_type,
+                name: {
+                  'en': 'county-en',
+                  'es': 'county-es'
+                },
+                feature_code: 'ADM2' }
+            ]
+          end
 
-          it 'returns just name' do 
-            expect(subject.name(state: true)).to eq 'some-name-en' 
+          it 'returns just name' do
+            expect(subject.name(state: true)).to eq 'some-name-en'
           end
         end
       end
