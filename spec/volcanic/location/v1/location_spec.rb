@@ -254,6 +254,20 @@ RSpec.describe Volcanic::Location::V1::Location do
     describe 'for other locale' do
       let(:locale) { :es }
       it { expect(subject.name).to eq 'some-name-es' }
+      context 'missing translation' do
+        let(:params) do
+          {
+            name: {
+              'en': 'some-name-en'
+            },
+            feature_code: feature_code,
+            hierarchy: hierarchy
+          }
+        end
+        it 'defualts to en' do
+          expect(subject.name).to eq 'some-name-en'
+        end
+      end
     end
 
     describe 'state enabled' do
@@ -291,6 +305,34 @@ RSpec.describe Volcanic::Location::V1::Location do
         context 'for other locale' do
           let(:locale) { :es }
           it { expect(subject.name(state: true)).to eq 'some-name-es, state-es' }
+          context 'missing city translation' do
+            let(:params) do
+              {
+                name: {
+                  'en': 'some-name-en'
+                },
+                feature_code: feature_code,
+                hierarchy: hierarchy
+              }
+            end
+            it 'defaults to english' do
+              expect(subject.name(state: true)).to eq 'some-name-en, state-es'
+            end
+          end
+          context 'missing state translation' do
+            let(:hierarchy) do
+              [
+                { source_id: 1235, source_type: source_type,
+                  name: {
+                    'en': 'state-en'
+                  },
+                  feature_code: 'ADM1' }
+              ]
+            end
+            it 'defaults to english' do
+              expect(subject.name(state: true)).to eq 'some-name-es, state-en'
+            end
+          end
         end
         context 'no state in hierarchy' do
           let(:hierarchy) do
