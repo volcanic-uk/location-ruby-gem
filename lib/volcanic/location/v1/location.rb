@@ -39,17 +39,13 @@ class Volcanic::Location::V1::Location
     def find(id, **params)
       raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
 
-      res = conn.get("#{API_PATH}/#{id}", params)
-
-      new(**res.body)
+      new(**prepare_required_field(id)).reload(**params)
     end
 
     def update(id, **params)
       raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
 
-      res = conn.post("#{API_PATH}/#{id}", params)
-
-      res.body[:status] == 200
+      new(**prepare_required_field(id)).save(**params)
     end
   end
 
@@ -57,22 +53,23 @@ class Volcanic::Location::V1::Location
     write_self(source_type: source_type, source_id: source_id, **params)
   end
 
-  # no API to support this
-  # def reload
-  #   raise_unpersisted unless persisted?
-  #
-  #   response = conn.get(persisted_path)
-  #   write_self(**response.body)
-  #   self
-  # end
+  def reload(**extra_params)
+    raise_unpersisted unless persisted?
+  
+    response = conn.get(persisted_path, extra_params)
+    write_self(**response.body)
+    self
+  end
 
   # TODO: fix the update path to return the location
   def save(path: persisted_path, **extra_params)
-    response = conn.post(path) do |req|
-      req.body = fetch_self.merge(extra_params).compact
+    body = fetch_self.merge(extra_params).compact
+    conn.post(path) do |req|
+      req.body = body
     end
 
-    response.tap { |res| write_self(**res.body) }
+    write_self(**body)
+    self
   end
 
   def delete!
@@ -129,6 +126,10 @@ class Volcanic::Location::V1::Location
   end
 
   private
+
+  def self.prepare_required_field(pk)
+    { source_id: pk, source_type: 'geonames', pk: pk }
+  end
 
   def persisted_path
     "#{API_PATH}/#{pk}"
