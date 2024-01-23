@@ -7,7 +7,6 @@ require 'json'
 # rubocop:disable Metrics/ClassLength
 # location class
 class Volcanic::Location::V1::Location
-  extend Volcanic::Location::ConnectionHelper
   include Volcanic::Location::ConnectionHelper
 
   UPDATABLE_ATTR = %i( name asciiname alternatenames latitude longitude hierarchy_ids
@@ -39,13 +38,18 @@ class Volcanic::Location::V1::Location
     def find(id, **params)
       raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
 
-      new(**prepare_required_field(id)).reload(**params)
+      conn = Volcanic::Location::Connection.new
+      res = conn.get("#{API_PATH}/#{id}", params)
+      new(**res.body)
     end
 
     def update(id, **params)
       raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
 
-      new(**prepare_required_field(id)).save(**params)
+      conn = Volcanic::Location::Connection.new
+      res = conn.post("#{API_PATH}/#{id}", params)
+
+      res.body[:status] == 200
     end
   end
 
@@ -53,23 +57,22 @@ class Volcanic::Location::V1::Location
     write_self(source_type: source_type, source_id: source_id, **params)
   end
 
-  def reload(**extra_params)
-    raise_unpersisted unless persisted?
-  
-    response = conn.get(persisted_path, extra_params)
-    write_self(**response.body)
-    self
-  end
+  # no API to support this
+  # def reload
+  #   raise_unpersisted unless persisted?
+  #
+  #   response = conn.get(persisted_path)
+  #   write_self(**response.body)
+  #   self
+  # end
 
   # TODO: fix the update path to return the location
   def save(path: persisted_path, **extra_params)
-    body = fetch_self.merge(extra_params).compact
-    conn.post(path) do |req|
-      req.body = body
+    response = conn.post(path) do |req|
+      req.body = fetch_self.merge(extra_params).compact
     end
 
-    write_self(**body)
-    self
+    response.tap { |res| write_self(**res.body) }
   end
 
   def delete!
@@ -126,10 +129,6 @@ class Volcanic::Location::V1::Location
   end
 
   private
-
-  def self.prepare_required_field(pk)
-    { source_id: pk, source_type: 'geonames', pk: pk }
-  end
 
   def persisted_path
     "#{API_PATH}/#{pk}"
