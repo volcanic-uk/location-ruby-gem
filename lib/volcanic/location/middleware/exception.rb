@@ -21,8 +21,8 @@ module Volcanic::Location::Middleware
           error = build_standard_error(body)
           exception = resolve_exception(error[:error_code], status_code, env)
           raise(exception || Volcanic::Location::LocationError, error.to_json)
-        when 500
-          raise Volcanic::Location::ServerError, build_server_error(body)
+        when 500..599
+          raise Volcanic::Location::ServerError, build_server_error(body, status_code)
         end
       end
     end
@@ -50,11 +50,11 @@ module Volcanic::Location::Middleware
       error.empty? ? body : error
     end
 
-    def build_server_error(body)
+    def build_server_error(body, status_code = 500)
       {
         request_id: body.delete('request_id'),
         message: 'Server error, Please contact Location service support/team',
-        status_code: 500
+        status_code: status_code
       }
     end
 
