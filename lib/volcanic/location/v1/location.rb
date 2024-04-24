@@ -7,7 +7,6 @@ require 'json'
 # rubocop:disable Metrics/ClassLength
 # location class
 class Volcanic::Location::V1::Location
-  extend Volcanic::Location::ConnectionHelper
   include Volcanic::Location::ConnectionHelper
 
   UPDATABLE_ATTR = %i( name asciiname alternatenames latitude longitude hierarchy_ids
@@ -39,14 +38,15 @@ class Volcanic::Location::V1::Location
     def find(id, **params)
       raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
 
+      conn = Volcanic::Location::Connection.new
       res = conn.get("#{API_PATH}/#{id}", params)
-
       new(**res.body)
     end
 
     def update(id, **params)
       raise Volcanic::Location::LocationError unless id =~ /(\w+)-(\d+)/
 
+      conn = Volcanic::Location::Connection.new
       res = conn.post("#{API_PATH}/#{id}", params)
 
       res.body[:status] == 200

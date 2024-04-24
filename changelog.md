@@ -3,6 +3,13 @@
 All notable changes to Volcanic Location will be documented in this file.
 Release date format: DD/MM/YYYY
 
+## [1.1.7] - 25/03/2024
+fix bug unsupported 5xx error response exception
+
+## [1.1.6] - 23/01/2024
+fix bug related to memoize instance on class method
+
+### Added
 
 ## [1.1.0] - 21/03/2023
 
