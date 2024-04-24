@@ -12,7 +12,7 @@ class Volcanic::Location::V1::Location
   UPDATABLE_ATTR = %i( name asciiname alternatenames latitude longitude hierarchy_ids
                        coordinate feature_class feature_code country_code source_type source_id
                        admin1 admin2 admin3 admin4 timezone population modification_date
-                       parent_id admin1_name descendants_id hide).freeze
+                       parent_id admin1_name descendants_id hide target_id).freeze
   NON_UPDATABLE_ATTR = %i(pk id hierarchy).freeze
 
   API_PATH = 'api/v1/locations'
@@ -89,12 +89,12 @@ class Volcanic::Location::V1::Location
     translated_name = @name[:"#{loc}"]
     translated_name ||= @name[:en]
     return translated_name unless state && @hierarchy
-    
+
     return translated_name if %w(ADM1 PCLI PCL).include?(@feature_code)
 
     state = state_name(loc)
     if state
-      "#{translated_name}, #{state}" 
+      "#{translated_name}, #{state}"
     else
       translated_name
     end
