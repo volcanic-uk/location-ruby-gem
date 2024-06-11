@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require_relative '../helper/connection_helper'
+require_relative '../helper/logger_helper'
 
 # searching class
 class Volcanic::Location::V1::Search
   include Volcanic::Location::ConnectionHelper
+  include Volcanic::Location::LoggerHelper
 
   STANDARD_PATH = 'api/v1/locations'
   ADVANCE_PATH = 'api/v1/advanced_search'
@@ -31,6 +33,8 @@ class Volcanic::Location::V1::Search
     res = conn.get(search_api) do |req|
       req.params = filter
     end
+
+    logger.info("Location-ruby-gem Search result: #{res.inspect}")
 
     build_instance(**res.body)
   end
