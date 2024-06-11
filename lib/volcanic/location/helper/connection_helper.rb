@@ -10,7 +10,7 @@ module Volcanic
       attr_writer :conn
 
       def conn
-        @conn ||= Volcanic::Location::Connection.new
+        @conn = Volcanic::Location::Connection.new
       end
     end
   end
