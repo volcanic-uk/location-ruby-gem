@@ -21,7 +21,7 @@ module Volcanic
           @domain_url
         end
 
-        def enable_custom_auth
+        def enable_custom_auth?
           @enable_custom_auth == true
         end
 
