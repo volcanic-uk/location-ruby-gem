@@ -68,6 +68,11 @@ RSpec.describe Volcanic::Location::Connection do
         expect(subject.env[:request_headers]['Authorization']).to be_nil
       end
     end
+
+    context 'when enable custom auth header' do
+      before { Volcanic::Location.configure.enable_custom_auth = true }
+      it { expect(subject.env[:request_headers]['X-Custom-Auth']).to eq 'true' }
+    end
   end
 
   describe 'when using Exception middleware' do

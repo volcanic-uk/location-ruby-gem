@@ -20,7 +20,6 @@ module Volcanic
       def initialize
         @conn = Faraday.new(url: domain_url) do |conn|
           conn.request :json
-          conn.request :multipart # to support form data req on s3 singed url
           conn.request :retry, retry_options
           conn.response :json, content_type: /\bjson$/, parser_options: { symbolize_names: true }
           conn.adapter Faraday.default_adapter
