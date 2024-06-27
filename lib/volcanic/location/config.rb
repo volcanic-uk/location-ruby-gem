@@ -13,8 +13,7 @@ module Volcanic
     class Configuration
       class << self
         attr_accessor :authentication
-        attr_writer :enable_custom_auth
-        attr_writer :domain_url
+        attr_writer :domain_url, :enable_custom_auth
 
         def domain_url
           raise_missing_for 'domain' if @domain_url.nil?
