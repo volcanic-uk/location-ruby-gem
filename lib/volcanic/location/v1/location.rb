@@ -21,7 +21,7 @@ class Volcanic::Location::V1::Location
   attr_reader(*NON_UPDATABLE_ATTR)
 
   class << self
-    def create(source_type:, source_id:, **params)
+    def create(source_type: nil, source_id: nil, **params)
       new(source_type: source_type, source_id: source_id, **params)
         .tap do |instance|
           instance.save(path: API_PATH)
@@ -53,7 +53,7 @@ class Volcanic::Location::V1::Location
     end
   end
 
-  def initialize(source_type:, source_id:, **params)
+  def initialize(source_type: nil, source_id: nil, **params)
     write_self(source_type: source_type, source_id: source_id, **params)
   end
 
