@@ -39,12 +39,23 @@ RSpec.describe Volcanic::Location::V1::Location do
 
     context 'when missing source_id' do
       let(:params) { { source_type: source_type } }
-      it { expect { described_class.create(**params) }.to raise_error(ArgumentError) }
+      it 'allows creating location without source_id' do
+        expect { described_class.create(**params) }.not_to raise_error
+      end
     end
 
     context 'when missing source_type' do
       let(:params) { { source_id: source_id } }
-      it { expect { described_class.create(**params) }.to raise_error(ArgumentError) }
+      it 'allows creating location without source_type' do
+        expect { described_class.create(**params) }.not_to raise_error
+      end
+    end
+
+    context 'when both source_type and source_id are missing' do
+      let(:params) { { asciiname: 'test-name' } }
+      it 'allows creating location without source fields' do
+        expect { described_class.create(**params) }.not_to raise_error
+      end
     end
 
     it 'creates a new location' do
