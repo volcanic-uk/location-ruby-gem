@@ -30,6 +30,7 @@ RSpec.describe Volcanic::Location::V1::Location do
 
   before do
     allow(response).to receive(:body).and_return(response_body)
+    allow(response).to receive(:status).and_return(200)
     allow_any_instance_of(conn).to receive(:post).with(api_path).and_return(response)
   end
 
@@ -145,6 +146,11 @@ RSpec.describe Volcanic::Location::V1::Location do
           message: 'Location Not Found'
         }
       end
+
+      before do
+        allow(response).to receive(:status).and_return(404)
+      end
+
       it 'returns false' do
         expect(subject).to be_falsey
       end
