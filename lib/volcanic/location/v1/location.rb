@@ -49,7 +49,7 @@ class Volcanic::Location::V1::Location
       conn = Volcanic::Location::Connection.new
       res = conn.post("#{API_PATH}/#{id}", params)
 
-      res.body[:status] == 200
+      res.status == 200
     end
   end
 
