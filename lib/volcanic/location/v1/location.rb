@@ -72,7 +72,10 @@ class Volcanic::Location::V1::Location
       req.body = fetch_self.merge(extra_params).compact
     end
 
-    response.tap { |res| write_self(**res.body) }
+    response.tap do |res|
+      body = res.body[:createdLocation] || res.body
+      write_self(**body)
+    end
   end
 
   def delete!
