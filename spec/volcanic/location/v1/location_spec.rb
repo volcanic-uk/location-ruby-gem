@@ -18,15 +18,20 @@ RSpec.describe Volcanic::Location::V1::Location do
     }
   end
   let(:response) { double 'response' }
-  let(:response_body) do
+  let(:location_attributes) do
     {
       pk: pk,
       id: 'some-id',
       **params
     }
   end
+  let(:response_body) do
+    {
+      createdLocation: location_attributes
+    }
+  end
 
-  subject(:instance) { described_class.new(source_id: source_id, source_type: source_type, **response_body) }
+  subject(:instance) { described_class.new(source_id: source_id, source_type: source_type, **location_attributes) }
 
   before do
     allow(response).to receive(:body).and_return(response_body)
@@ -188,28 +193,35 @@ RSpec.describe Volcanic::Location::V1::Location do
     subject { instance.save }
     let(:response_body) do
       {
-        pk: 'pk-from-response',
-        **params
+        createdLocation: {
+          pk: 'pk-from-response',
+          **params
+        }
       }
     end
 
     it 'updates a location' do
+      subject
       expect(instance.pk).to eq 'pk-from-response'
     end
 
     context 'when provide different path' do
       let(:api_path) { '/some-path' }
-      subject { instance.save(api_path: api_path) }
+      subject { instance.save(path: api_path) }
 
       it 'uses the path to send request' do
+        subject
         expect(instance.pk).to eq 'pk-from-response'
       end
     end
   end
 
   describe '#hierarchy' do
-    let(:response_body) do
+    let(:location_attributes) do
       {
+        pk: pk,
+        id: 'some-id',
+        **params,
         hierarchy: [
           { source_id: 1234, source_type: source_type },
           { source_id: 1235, source_type: source_type }
@@ -372,8 +384,11 @@ RSpec.describe Volcanic::Location::V1::Location do
   end
 
   describe 'raw_name' do
-    let(:response_body) do
+    let(:location_attributes) do
       {
+        pk: pk,
+        id: 'some-id',
+        **params,
         name: {
           'en': 'some-name-en',
           'es': 'some-name-es'
@@ -381,6 +396,6 @@ RSpec.describe Volcanic::Location::V1::Location do
       }
     end
 
-    it { expect(subject.raw_name).to eq response_body[:name] }
+    it { expect(subject.raw_name).to eq location_attributes[:name] }
   end
 end
