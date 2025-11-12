@@ -15,40 +15,40 @@ class Volcanic::Location::V1::Event
       res.body
     end
 
-    def import_geonames(country_code:, limit: nil, callback_url: nil)
+    def import_geonames(country_code:, limit: nil)
       conn = Volcanic::Location::Connection.new
-      params = { country_code: country_code, limit: limit, callback_url: callback_url }.compact
+      params = { country_code: country_code, limit: limit }.compact
       res = conn.post("#{API_PATH}/import", params)
       res.body
     end
 
-    def translations(country_codes:, callback_url: nil)
+    def translations(country_codes:)
       conn = Volcanic::Location::Connection.new
-      res = conn.post("#{API_PATH}/translations", { country_codes: country_codes, callback_url: callback_url }.compact)
+      res = conn.post("#{API_PATH}/translations", { country_codes: country_codes })
       res.body
     end
 
     def hierarchy(country_codes:, batch_limit: 40, iteration: nil,
-                  ignore_filter_hierarchy: nil, start_key: nil, callback_url: nil)
+                  ignore_filter_hierarchy: nil, start_key: nil)
       conn = Volcanic::Location::Connection.new
       params = build_hierarchy_params(country_codes, batch_limit, iteration,
-                                      ignore_filter_hierarchy, start_key, callback_url)
+                                      ignore_filter_hierarchy, start_key)
       res = conn.post("#{API_PATH}/hierarchy", params)
       res.body
     end
 
-    def sync(ids: nil, country_code: nil, type: nil, iteration: nil, callback_url: nil)
+    def sync(ids: nil, country_code: nil, type: nil, iteration: nil)
       conn = Volcanic::Location::Connection.new
-      params = { ids: ids, country_code: country_code, type: type, iteration: iteration, callback_url: callback_url }.compact
+      params = { ids: ids, country_code: country_code, type: type, iteration: iteration }.compact
       res = conn.post("#{API_PATH}/sync", params)
       res.body
     end
 
     def duplicate(country_codes:, batch_limit: 1000, batch_iteration_limit: nil,
-                  start_key: nil, update_locations: true, callback_url: nil)
+                  start_key: nil, update_locations: true)
       conn = Volcanic::Location::Connection.new
       params = build_duplicate_params(country_codes, batch_limit, batch_iteration_limit,
-                                      start_key, update_locations, callback_url)
+                                      start_key, update_locations)
       res = conn.post("#{API_PATH}/duplicate", params)
       res.body
     end
@@ -80,17 +80,16 @@ class Volcanic::Location::V1::Event
     private
 
     def build_hierarchy_params(country_codes, batch_limit, iteration,
-                               ignore_filter_hierarchy, start_key, callback_url)
+                               ignore_filter_hierarchy, start_key)
       { country_codes: country_codes, batch_limit: batch_limit, iteration: iteration,
-        ignore_filter_hierarchy: ignore_filter_hierarchy, startKey: start_key,
-        callback_url: callback_url }.compact
+        ignore_filter_hierarchy: ignore_filter_hierarchy, startKey: start_key }.compact
     end
 
     def build_duplicate_params(country_codes, batch_limit, batch_iteration_limit,
-                               start_key, update_locations, callback_url)
+                               start_key, update_locations)
       { country_codes: country_codes, batch_limit: batch_limit,
         batch_iteration_limit: batch_iteration_limit, startKey: start_key,
-        update_locations: update_locations, callback_url: callback_url }.compact
+        update_locations: update_locations }.compact
     end
 
     def build_remove_hierarchy_params(id, replacement_id, batch_limit,
