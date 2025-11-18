@@ -21,7 +21,7 @@ class Volcanic::Location::V1::Location
   attr_reader(*NON_UPDATABLE_ATTR)
 
   class << self
-    def create(source_type:, source_id:, **params)
+    def create(source_type: nil, source_id: nil, **params)
       new(source_type: source_type, source_id: source_id, **params)
         .tap do |instance|
           instance.save(path: API_PATH)
@@ -49,11 +49,11 @@ class Volcanic::Location::V1::Location
       conn = Volcanic::Location::Connection.new
       res = conn.post("#{API_PATH}/#{id}", params)
 
-      res.body[:status] == 200
+      res.status == 200
     end
   end
 
-  def initialize(source_type:, source_id:, **params)
+  def initialize(source_type: nil, source_id: nil, **params)
     write_self(source_type: source_type, source_id: source_id, **params)
   end
 
@@ -72,7 +72,10 @@ class Volcanic::Location::V1::Location
       req.body = fetch_self.merge(extra_params).compact
     end
 
-    response.tap { |res| write_self(**res.body) }
+    response.tap do |res|
+      body = res.body[:createdLocation] || res.body
+      write_self(**body)
+    end
   end
 
   def delete!

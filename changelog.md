@@ -3,6 +3,15 @@
 All notable changes to Volcanic Location will be documented in this file.
 Release date format: DD/MM/YYYY
 
+## [1.1.12] - 06/11/2025
+### Fixed
+- Fixed location creation by properly handling nested `createdLocation` response from location-service API
+- Updated `save` method to extract attributes from nested response structure
+- Maintained backward compatibility for flat response structures
+
+### Changed
+- Updated test specs to match actual location-service API response structure
+
 ## [1.1.7] - 25/03/2024
 fix bug unsupported 5xx error response exception
 
