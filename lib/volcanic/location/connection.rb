@@ -15,7 +15,7 @@ module Volcanic
       attr_accessor :conn
 
       def_delegators 'Volcanic::Location::Configuration'.to_sym, :domain_url
-      def_delegators :conn, :get, :post, :delete, :put
+      def_delegators :conn, :get, :post, :delete, :put, :patch
 
       def initialize
         @conn = Faraday.new(url: domain_url) do |conn|

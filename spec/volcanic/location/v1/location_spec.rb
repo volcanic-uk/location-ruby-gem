@@ -18,18 +18,24 @@ RSpec.describe Volcanic::Location::V1::Location do
     }
   end
   let(:response) { double 'response' }
-  let(:response_body) do
+  let(:location_attributes) do
     {
       pk: pk,
       id: 'some-id',
       **params
     }
   end
+  let(:response_body) do
+    {
+      createdLocation: location_attributes
+    }
+  end
 
-  subject(:instance) { described_class.new(source_id: source_id, source_type: source_type, **response_body) }
+  subject(:instance) { described_class.new(source_id: source_id, source_type: source_type, **location_attributes) }
 
   before do
     allow(response).to receive(:body).and_return(response_body)
+    allow(response).to receive(:status).and_return(200)
     allow_any_instance_of(conn).to receive(:post).with(api_path).and_return(response)
   end
 
@@ -39,12 +45,23 @@ RSpec.describe Volcanic::Location::V1::Location do
 
     context 'when missing source_id' do
       let(:params) { { source_type: source_type } }
-      it { expect { described_class.create(**params) }.to raise_error(ArgumentError) }
+      it 'allows creating location without source_id' do
+        expect { described_class.create(**params) }.not_to raise_error
+      end
     end
 
     context 'when missing source_type' do
       let(:params) { { source_id: source_id } }
-      it { expect { described_class.create(**params) }.to raise_error(ArgumentError) }
+      it 'allows creating location without source_type' do
+        expect { described_class.create(**params) }.not_to raise_error
+      end
+    end
+
+    context 'when both source_type and source_id are missing' do
+      let(:params) { { asciiname: 'test-name' } }
+      it 'allows creating location without source fields' do
+        expect { described_class.create(**params) }.not_to raise_error
+      end
     end
 
     it 'creates a new location' do
@@ -134,6 +151,11 @@ RSpec.describe Volcanic::Location::V1::Location do
           message: 'Location Not Found'
         }
       end
+
+      before do
+        allow(response).to receive(:status).and_return(404)
+      end
+
       it 'returns false' do
         expect(subject).to be_falsey
       end
@@ -171,28 +193,35 @@ RSpec.describe Volcanic::Location::V1::Location do
     subject { instance.save }
     let(:response_body) do
       {
-        pk: 'pk-from-response',
-        **params
+        createdLocation: {
+          pk: 'pk-from-response',
+          **params
+        }
       }
     end
 
     it 'updates a location' do
+      subject
       expect(instance.pk).to eq 'pk-from-response'
     end
 
     context 'when provide different path' do
       let(:api_path) { '/some-path' }
-      subject { instance.save(api_path: api_path) }
+      subject { instance.save(path: api_path) }
 
       it 'uses the path to send request' do
+        subject
         expect(instance.pk).to eq 'pk-from-response'
       end
     end
   end
 
   describe '#hierarchy' do
-    let(:response_body) do
+    let(:location_attributes) do
       {
+        pk: pk,
+        id: 'some-id',
+        **params,
         hierarchy: [
           { source_id: 1234, source_type: source_type },
           { source_id: 1235, source_type: source_type }
@@ -355,8 +384,11 @@ RSpec.describe Volcanic::Location::V1::Location do
   end
 
   describe 'raw_name' do
-    let(:response_body) do
+    let(:location_attributes) do
       {
+        pk: pk,
+        id: 'some-id',
+        **params,
         name: {
           'en': 'some-name-en',
           'es': 'some-name-es'
@@ -364,6 +396,6 @@ RSpec.describe Volcanic::Location::V1::Location do
       }
     end
 
-    it { expect(subject.raw_name).to eq response_body[:name] }
+    it { expect(subject.raw_name).to eq location_attributes[:name] }
   end
 end
