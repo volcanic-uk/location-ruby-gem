@@ -3,6 +3,10 @@
 All notable changes to Volcanic Location will be documented in this file.
 Release date format: DD/MM/YYYY
 
+## [Unreleased]
+### Added
+- `Volcanic::Location::V1::Api.geonames_preview(geonames_id)` calling `GET api/v1/locations/geonames_preview/:id`
+
 ## [1.1.12] - 06/11/2025
 ### Fixed
 - Fixed location creation by properly handling nested `createdLocation` response from location-service API

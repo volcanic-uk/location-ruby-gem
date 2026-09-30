@@ -32,5 +32,15 @@ class Volcanic::Location::V1::Api
       res = conn.get("#{API_PATH}/descendants/#{id}", params)
       res.body
     end
+
+    # Previews the chain (location plus ancestors) that importing +geonames_id+ from
+    # GeoNames would create, flagging entries that do not yet exist with +exists: false+.
+    def geonames_preview(geonames_id)
+      raise Volcanic::Location::LocationError, 'geonames_id is required' if geonames_id.nil? || geonames_id.to_s.empty?
+
+      conn = Volcanic::Location::Connection.new
+      res = conn.get("#{API_PATH}/geonames_preview/#{geonames_id}")
+      res.body
+    end
   end
 end
