@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'volcanic/location/version'
+require 'stringio'
 
 RSpec.describe Volcanic::Location::Connection do
   let(:stubs)  { Faraday::Adapter::Test::Stubs.new }
@@ -92,6 +93,53 @@ RSpec.describe Volcanic::Location::Connection do
     context 'when response status 404 NotFound' do
       let(:status) { 404 }
       it('raises LocationNotFound') { expect { subject }.to raise_error Volcanic::Location::LocationNotFound }
+    end
+  end
+
+  describe 'Faraday logger' do
+    let(:test_stubs) { Faraday::Adapter::Test::Stubs.new }
+    let(:connection) do
+      described_class.new.tap do |instance|
+        instance.conn.builder.adapter(:test, test_stubs)
+      end
+    end
+    let(:authorizations) { [] }
+
+    before do
+      allow_any_instance_of(Faraday::Retry::Middleware).to receive(:sleep)
+      headers = authorizations
+      attempts = 0
+      test_stubs.get('/api/v1/advanced_search') do |env|
+        attempts += 1
+        headers << env.request_headers['Authorization']
+        raise Faraday::TimeoutError if attempts == 1
+
+        [
+          200,
+          { 'Content-Type' => 'application/json', 'X-Amzn-Trace-Id' => 'resp-header-value' },
+          '{"locations":[]}'
+        ]
+      end
+    end
+
+    def capture_stdout
+      original = $stdout
+      $stdout = StringIO.new
+      yield
+      $stdout.string
+    ensure
+      $stdout = original
+    end
+
+    it 'logs the request line and status without headers' do
+      logged = capture_stdout do
+        connection.conn.get('api/v1/advanced_search')
+      end
+
+      expect(authorizations.last).to eq('Bearer api_key')
+      expect(logged).to include('GET http://test.com/api/v1/advanced_search')
+      expect(logged).to include('Status 200')
+      expect(logged).not_to match(/Authorization|Bearer|api_key|User-Agent|resp-header-value/)
     end
   end
 end

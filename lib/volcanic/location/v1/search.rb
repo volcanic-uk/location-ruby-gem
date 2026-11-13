@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'json'
 require_relative '../helper/connection_helper'
 require_relative '../helper/logger_helper'
 
@@ -30,13 +31,21 @@ class Volcanic::Location::V1::Search
   end
 
   def search(filter)
+    started_at = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     res = conn.get(search_api) do |req|
       req.params = filter
     end
 
-    logger.info("Location-ruby-gem Search result: #{res.inspect}")
+    log_result(res, filter, started_at)
 
     build_instance(**res.body)
+  end
+
+  def log_result(res, filter, started_at)
+    duration_ms = ((Process.clock_gettime(Process::CLOCK_MONOTONIC) - started_at) * 1000).round
+    count = res.body.is_a?(Hash) ? Array(res.body[:locations]).size : 0
+    logger.info("Location-ruby-gem Search result: status=#{res.status} count=#{count} " \
+                "duration_ms=#{duration_ms} path=#{search_api} params=#{filter.to_json}")
   end
 
   def build_instance(pagination: {}, locations: [])
