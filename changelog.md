@@ -3,6 +3,11 @@
 All notable changes to Volcanic Location will be documented in this file.
 Release date format: DD/MM/YYYY
 
+## [1.1.14] - 13/11/2026
+### Security
+- `Search` logs one summary line per search (status, result count, duration, path and params) instead of the whole Faraday response. The response's inspect output included the request headers, so every search logged the Location Service bearer token, and its body made log lines of up to 0.8 MiB.
+- The Faraday request logger no longer logs request or response headers. Retried requests logged the `Authorization` header.
+
 ## [1.1.12] - 06/11/2025
 ### Fixed
 - Fixed location creation by properly handling nested `createdLocation` response from location-service API

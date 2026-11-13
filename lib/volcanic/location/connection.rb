@@ -24,7 +24,7 @@ module Volcanic
           conn.response :json, content_type: /\bjson$/, parser_options: { symbolize_names: true }
           conn.adapter Faraday.default_adapter
 
-          conn.use Faraday::Response::Logger
+          conn.use Faraday::Response::Logger, nil, headers: false
           conn.use Volcanic::Location::Middleware::UserAgent
           conn.use Volcanic::Location::Middleware::Authentication
           conn.use Volcanic::Location::Middleware::RequestId
