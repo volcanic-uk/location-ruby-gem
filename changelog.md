@@ -5,7 +5,7 @@ Release date format: DD/MM/YYYY
 
 ## [1.1.14] - 13/11/2026
 ### Security
-- `Search` logs one summary line per search (status, result count, duration, path and params) instead of the whole Faraday response. The response's inspect output included the request headers, so every search logged the Location Service bearer token, and its body made log lines of up to 0.8 MiB.
+- `Search` logs one summary line per search (status, result count, duration, API Gateway request ID, path and params) instead of the whole Faraday response. The response's inspect output included the request headers, so every search logged the Location Service bearer token, and its body made log lines of up to 0.8 MiB. The request ID (`x-amzn-requestid`) finds the call in the Location Service's API Gateway execution logs.
 - The Faraday request logger no longer logs request or response headers. Retried requests logged the `Authorization` header.
 
 ## [1.1.12] - 06/11/2025

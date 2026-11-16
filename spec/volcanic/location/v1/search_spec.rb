@@ -14,7 +14,8 @@ RSpec.describe Volcanic::Location::V1::Search do
     ]
   end
   let(:response_body) { { locations: mock_locs } }
-  let(:response) { instance_double(Faraday::Response, status: 200, body: response_body) }
+  let(:response_headers) { Faraday::Utils::Headers.new }
+  let(:response) { instance_double(Faraday::Response, status: 200, body: response_body, headers: response_headers) }
   let(:api_path) { 'api/v1/advanced_search' }
 
   let(:filter) { { 'name': 'test' } }
@@ -48,14 +49,27 @@ RSpec.describe Volcanic::Location::V1::Search do
       allow_any_instance_of(described_class).to receive(:logger).and_return(Logger.new(log_io))
     end
 
-    it 'logs a single summary line' do
-      allow(Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(100.0, 100.25)
+    context 'when the response carries the API Gateway request id' do
+      let(:response_headers) do
+        Faraday::Utils::Headers.new('x-amzn-RequestId' => 'apigw-req-123', 'X-Amz-Cf-Id' => 'cf-header-value')
+      end
+
+      it 'logs a single summary line' do
+        allow(Process).to receive(:clock_gettime).with(Process::CLOCK_MONOTONIC).and_return(100.0, 100.25)
+        instance
+        expect(log_output.lines.size).to eq(1)
+        expect(log_output).to include(
+          'Location-ruby-gem Search result: status=200 count=2 duration_ms=250 ' \
+          'apigw_request_id=apigw-req-123 ' \
+          'path=api/v1/advanced_search params={"name":"test"}'
+        )
+        expect(log_output).not_to include('cf-header-value')
+      end
+    end
+
+    it 'logs - for the API Gateway request id when the header is absent' do
       instance
-      expect(log_output.lines.size).to eq(1)
-      expect(log_output).to include(
-        'Location-ruby-gem Search result: status=200 count=2 duration_ms=250 ' \
-        'path=api/v1/advanced_search params={"name":"test"}'
-      )
+      expect(log_output).to include('apigw_request_id=-')
     end
 
     context 'when the response inspect contains credentials' do

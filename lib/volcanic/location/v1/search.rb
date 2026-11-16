@@ -45,7 +45,12 @@ class Volcanic::Location::V1::Search
     duration_ms = ((Process.clock_gettime(Process::CLOCK_MONOTONIC) - started_at) * 1000).round
     count = res.body.is_a?(Hash) ? Array(res.body[:locations]).size : 0
     logger.info("Location-ruby-gem Search result: status=#{res.status} count=#{count} " \
-                "duration_ms=#{duration_ms} path=#{search_api} params=#{filter.to_json}")
+                "duration_ms=#{duration_ms} apigw_request_id=#{apigw_request_id(res)} " \
+                "path=#{search_api} params=#{filter.to_json}")
+  end
+
+  def apigw_request_id(res)
+    res.headers['x-amzn-requestid'] || '-'
   end
 
   def build_instance(pagination: {}, locations: [])
