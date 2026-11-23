@@ -2,6 +2,6 @@
 
 module Volcanic
   module Location
-    VERSION = '1.1.13'
+    VERSION = '1.1.14'
   end
 end
